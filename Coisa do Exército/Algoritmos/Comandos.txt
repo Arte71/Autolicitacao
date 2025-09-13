@@ -1,0 +1,32 @@
+import pymupdf
+
+doc = pymupdf.open("Document Demanda.pdf")
+page = doc[0]
+out = open("DocumentoTeste.txt", "wb")
+text = page.get_text()
+
+blocks = page.get_text("blocks", sort=True)
+
+for block in blocks:
+    print('block #', block[5])
+    print(block, "\n")
+-------
+
+cropstart = page.search_for("Perfil Integrante ")
+
+cropend = page.search_for("NC")
+
+rx0 = cropstart[0].x0
+ry0 = cropstart[0].y0
+
+rx1 = cropend[0].x1
+ry1 = cropend[0].y1
+
+cr = pymupdf.Rect(rx0, ry0, rx1, ry1)
+
+print(cr)
+
+text = page.get_text(clip=cr)
+
+print(text)
+
