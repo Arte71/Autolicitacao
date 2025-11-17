@@ -1,0 +1,17 @@
+<div class="foto">
+        <img src="assets/cheesed.png" alt="cartoon mouse smiling and holding a piece of cheese in a bright kitchen with sunlight streaming through the window, cheerful atmosphere">
+    </div>
+    <div class="login">
+        <h1>Nome do Sist</h1>    
+        <form action=""></form>
+        <input type="text" id="user" name="user" class="loginform" placeholder="Usuário...">
+        <input type="password" id="password" name="password" class="loginform" placeholder="Senha...">
+        <input type="submit" class="entrar" value="Entrar">
+        <button 
+            onclick="window.location.href='https://sso.staging.acesso.gov.br/authorize?response_type=code&client_id=aplicacao-exemplo-php&scope=openid%20profile%20email%20phone%20govbr_confiabilidades&redirect_uri=http://localhost:8080/redirect-uri.php&state=ABCDEF&nonce=123456&code_challenge=<?php echo $codeChallenge; ?>&code_challenge_method=S256'">
+        Entrar com gov.br
+        </button>
+        <div class="container">
+            <span class="snh">Esqueceu a senha? <a href="">Clique aqui</a></span>
+        </div>
+    </div>

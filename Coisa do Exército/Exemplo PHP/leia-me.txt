@@ -1,0 +1,22 @@
+Orientações:
+---------------------------------
+A aplicação deve sempre manter o token response (access token e id token) em backend por motivos de segurança.
+
+Credenciais para teste:
+
+Client ID: aplicacao-exemplo-php
+Secret: Deve ser solicitado via e-mail integracao-acesso-govbr@economia.gov.br
+
+Home Page: http://localhost:8080
+Redirect URI: http://localhost:8080/redirect-uri.php
+Pós logout redirect URI: http://localhost:8080/logout.php
+
+Antes de executar, edite a página redirect-uri.php e altere a linha abaixo usando o secret recebido:
+'client_secret' => 'SECRET_RECEBIDO_POR_EMAIL',
+
+Para executar, em um terminal entre na pasta "exemplo-php" descompactada e execute:
+docker-compose up
+
+Entrar no site através de http://localhost:8080
+
+----------------------------------------
