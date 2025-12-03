@@ -1,1 +1,40 @@
-<p>licitacoes works!</p>
+<div class="licitacoes">
+  <h2>Lista de Licitações</h2>
+  <div *ngFor="let licitacao of licitacoes" (click)="selectLicitacao(licitacao)">
+    <div>{{ licitacao._id }}</div>
+    <div>Status: {{ licitacao.status }}</div>
+  </div>
+
+  <div *ngIf="selectedLicitacao">
+    <h3>Itens de Licitação {{ selectedLicitacao._id }}</h3>
+    <ul>
+      <li *ngFor="let item of selectedLicitacao.items">
+        {{ item.descricao }} - {{ item.quantidade_total }}
+      </li>
+    </ul>
+
+    <form (ngSubmit)="addItem()">
+      <label for="descricao">Descrição</label>
+      <input id="descricao" [(ngModel)]="itemForm().descricao" name="descricao" required readonly />
+
+      <label for="catmat">Código de Material (CatMat)</label>
+      <input id="catmat" [(ngModel)]="itemForm().catmat" name="catmat" readonly />
+
+      <label for="quantidade_total">Quantidade</label>
+      <input id="quantidade_total" [(ngModel)]="itemForm().quantidade_total" name="quantidade_total" type="number" required />
+
+      <div *ngIf="itemForm().quantidade_total <= 0" class="error">
+        Quantidade total deve ser um número maior que 0.
+      </div>
+
+      <button type="submit" [disabled]="!itemForm().descricao || itemForm().quantidade_total <= 0">Adicionar Item</button>
+    </form>
+
+    <button (click)="saveLicitacao()">Salvar Alterações</button>
+
+    <button (click)="downloadFile()" class="btn">Baixar Arquivo</button>
+
+    <input type="file" (change)="onFileSelected($event)" accept=".odt" />
+    <button (click)="uploadFile()" [disabled]="!selectedFile" class="btn">Enviar Arquivo</button>
+  </div>
+</div>
