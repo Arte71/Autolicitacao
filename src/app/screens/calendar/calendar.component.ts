@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { CalendarServiceService } from '../../services/calendar.service.service';
 import { CalendarEvent } from '../../model/calendar-event';
+import { MenuItemComponent } from '../../components/shared/menu-item/menu-item.component';
+
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MenuItemComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
 })

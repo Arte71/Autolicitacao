@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { TitleComponent } from '../../components/shared/title/title.component';
 import { TodosService } from '../../services/todos.service.service';
+import { CalendarComponent } from '../calendar/calendar.component';
 
 
 @Component({
   selector: 'app-todos',
-  imports: [TitleComponent],
+  imports: [TitleComponent, CalendarComponent],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.css',
 })

@@ -7,7 +7,7 @@ import { Minhaslicitacoes } from './screens/minhaslicitacoes/minhaslicitacoes';
 
 export const routes: Routes = [
 
-     { path: '', component: PageComponent }, // rota padrão
+     { path: '', component: TodosComponent }, // rota padrão
   { path: 'calendar', component: CalendarComponent },
   { path: 'todos', component: TodosComponent },
   {path: 'licitacoes', component: Licitacoes},
