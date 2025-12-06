@@ -1,7 +1,7 @@
 // src/app/services/todos.service.ts
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs'; // Necessário para usar 'await' com HttpClient
+import { HttpClient, HttpParams } from '@angular/common/http'; // 🚨 Importar HttpParams
+import { firstValueFrom } from 'rxjs';
 import { Licitacao, Usuario } from '../model/todo.entity';
 
 @Injectable({
@@ -11,7 +11,8 @@ export class TodosService {
   
   // -- Configuração do Backend --
   private readonly http = inject(HttpClient);
-  private readonly apiBaseUrl = 'http://localhost:3000/api'; // 🚨 ATENÇÃO: SUBSTITUA PELO SEU URL REAL!
+  // 🚨 ATENÇÃO: SUBSTITUA ESTE ENDEREÇO PELO URL REAL DO SEU BACKEND
+  private readonly apiBaseUrl = 'http://localhost:3000/api'; 
   
   // -- Signals de Estado e Dados --
   private readonly _items = signal<Array<Licitacao>>([]);
@@ -20,48 +21,60 @@ export class TodosService {
   loadingItems = signal(false);
   loadingUsers = signal(false);
   
-  // Simulação do Utilizador Logado
+  // Simulação do Utilizador Logado (ID será usado para filtrar no backend)
+  // Assumimos que este ID é o que o backend vai usar para filtrar IdUsuario ou IdResponsavel
   private readonly currentUser = signal<Usuario>({
     _id: 'user_1', nomeUsuario: 'Admin Atual', orgao: 'Departamento TI'
   });
 
   // Exposição dos dados e filtro
   readonly items = this._items.asReadonly();
+  
+  // Computed: Filtra utilizadores automaticamente baseado no órgão do utilizador atual
   readonly usersDoMesmoOrgao = computed(() => 
     this._users().filter(u => u.orgao === this.currentUser().orgao)
   );
 
   // -------------------------------------------------------------------
-  // MÉTODOS DE BACKEND (Utilizando HttpClient)
+  // MÉTODOS DE BACKEND (Utilizando HttpClient e Filtragem)
   // -------------------------------------------------------------------
 
+  // Carrega as duas listas em paralelo
   async loadAllData(): Promise<void> {
     await Promise.all([this.fetchLicitacoes(), this.fetchUsers()]);
   }
 
-  // GET: Obter Licitações
+  // GET: Obter Licitações - AGORA FILTRA PELO UTILIZADOR LOGADO
   async fetchLicitacoes(): Promise<void> {
     this.loadingItems.set(true);
     
+    // 1. Obter o ID do utilizador logado para filtragem
+    const userId = this.currentUser()._id; 
+
+    // 2. Construir os parâmetros de consulta para enviar ao backend
+    let params = new HttpParams();
+    params = params.set('userId', userId);
+    
     try {
+        // 3. Enviar a requisição com o parâmetro de filtragem
+        // O backend deve usar este 'userId' para buscar licitações por IdUsuario OU IdResponsavel
         const backendData = await firstValueFrom(
-            this.http.get<Licitacao[]>(`${this.apiBaseUrl}/licitacoes`)
+            this.http.get<Licitacao[]>(`${this.apiBaseUrl}/licitacoes`, { params: params })
         );
+
         this._items.set(backendData);
     } catch (error) {
-        console.error('Erro ao buscar licitações:', error);
-        // Em produção, aqui você exibe uma mensagem de erro para o utilizador
+        console.error('Erro ao buscar licitações filtradas:', error);
     } finally {
         this.loadingItems.set(false);
     }
   }
 
-  // GET: Obter Utilizadores
+  // GET: Obter Utilizadores (Permanece igual, sem filtragem por ID)
   async fetchUsers(): Promise<void> {
     this.loadingUsers.set(true);
     
     try {
-        // Assume-se que a sua API tem um endpoint para obter todos os utilizadores
         const allUsers = await firstValueFrom(
             this.http.get<Usuario[]>(`${this.apiBaseUrl}/users`) 
         );
@@ -73,12 +86,11 @@ export class TodosService {
     }
   }
   
-  // POST: Adicionar Licitação
+  // POST: Adicionar Licitação (Permanece igual)
   async add(titulo: string, mensagem: string | null, responsavelId: string): Promise<void> {
     const dataToSend = { titulo, mensagem: mensagem || '', responsavelId, completed: false };
     
     try {
-        // Envia os dados e espera que o backend retorne a nova licitação criada (com o ID do Mongo)
         const newLicitacao = await firstValueFrom(
             this.http.post<Licitacao>(`${this.apiBaseUrl}/licitacoes`, dataToSend)
         );
@@ -89,7 +101,7 @@ export class TodosService {
     }
   }
 
-  // PATCH/PUT: Alternar Estado
+  // PATCH/PUT: Alternar Estado (Permanece igual)
   async toggle(id: string): Promise<void> {
     const currentItem = this._items().find(i => i._id === id);
     if (!currentItem) return;
@@ -111,7 +123,7 @@ export class TodosService {
     }
   }
 
-  // DELETE: Remover Licitação
+  // DELETE: Remover Licitação (Permanece igual)
   async remove(id: string): Promise<void> {
     try {
         await firstValueFrom(
