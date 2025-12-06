@@ -1,27 +1,59 @@
-import { Component, inject } from '@angular/core';
+// src/app/screens/todos/todos.component.ts
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { TitleComponent } from '../../components/shared/title/title.component';
-import { TodosService } from '../../services/todos.service.service';
 import { CalendarComponent } from '../calendar/calendar.component';
-
+import { TodosService } from '../../services/todos.service.service';
 
 @Component({
   selector: 'app-todos',
-  imports: [TitleComponent, CalendarComponent],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, TitleComponent, CalendarComponent],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.css',
 })
 export class TodosComponent {
-  readonly todos = inject(TodosService);
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  readonly todosService = inject(TodosService);
 
-  addTodo(event: Event, input: HTMLInputElement) {
-  event.preventDefault();
+  isModalOpen = signal(false);
 
-  const title = input.value.trim();
-  if (!title) return;
+  licitacaoForm = this.fb.group({
+    titulo: ['', Validators.required],
+    mensagem: [''],
+    responsavel: ['', Validators.required]
+  });
 
-  this.todos.add(title);
+  // Carrega os dados do backend na inicialização
+  constructor() {
+    this.todosService.loadAllData();
+  }
 
-  input.value = '';
-}
+  openDetails(id: string) {
+    // A rota deve ser configurada no seu ficheiro de rotas
+    this.router.navigate(['/generetes/relacao-itens', id]);
+  }
 
+  openForm() {
+    this.isModalOpen.set(true);
+  }
+
+  closeForm() {
+    this.isModalOpen.set(false);
+    this.licitacaoForm.reset();
+  }
+
+  async onSubmit() {
+    if (this.licitacaoForm.valid) {
+      const { titulo, mensagem, responsavel } = this.licitacaoForm.value;
+      
+      // Espera o Service enviar e receber a confirmação do backend
+      await this.todosService.add(titulo!, mensagem!, responsavel!);
+      
+      this.closeForm();
+    }
+  }
 }
