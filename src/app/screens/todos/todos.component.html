@@ -23,11 +23,10 @@
         @if (todosService.loadingItems()) {
             <p>A carregar licitações do servidor...</p>
         } @else {
+            
             @for(item of todosService.items(); track item._id; let i = $index) {
                 
-                <div 
-                    (click)="openDetails(item._id)"
-                    title="Clique para ver a relação de itens">
+                <div title="Item de Licitação">
                     
                     <span>
                         {{ i + 1 }}.
@@ -47,11 +46,11 @@
 
                     <div>
                         <button 
-                            (click)="todosService.toggle(item._id); $event.stopPropagation()">
-                        </button>
+                            (click)="todosService.toggle(item._id)">
+                            </button>
                         
                         <button 
-                            (click)="todosService.remove(item._id); $event.stopPropagation()">
+                            (click)="todosService.remove(item._id)">
                             X
                         </button>
                     </div>

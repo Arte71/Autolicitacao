@@ -1,9 +1,8 @@
 // src/app/services/todos.service.ts
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http'; // 🚨 Importar HttpParams
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Licitacao, Usuario } from '../model/todo.entity';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -21,8 +20,7 @@ export class TodosService {
   loadingItems = signal(false);
   loadingUsers = signal(false);
   
-  // Simulação do Utilizador Logado (ID será usado para filtrar no backend)
-  // Assumimos que este ID é o que o backend vai usar para filtrar IdUsuario ou IdResponsavel
+  // Simulação do Utilizador Logado
   private readonly currentUser = signal<Usuario>({
     _id: 'user_1', nomeUsuario: 'Admin Atual', orgao: 'Departamento TI'
   });
@@ -36,7 +34,7 @@ export class TodosService {
   );
 
   // -------------------------------------------------------------------
-  // MÉTODOS DE BACKEND (Utilizando HttpClient e Filtragem)
+  // MÉTODOS DE BACKEND (Comunicação Assíncrona)
   // -------------------------------------------------------------------
 
   // Carrega as duas listas em paralelo
@@ -44,20 +42,17 @@ export class TodosService {
     await Promise.all([this.fetchLicitacoes(), this.fetchUsers()]);
   }
 
-  // GET: Obter Licitações - AGORA FILTRA PELO UTILIZADOR LOGADO
+  // GET: Obter Licitações - FILTRA PELO ID DO UTILIZADOR
   async fetchLicitacoes(): Promise<void> {
     this.loadingItems.set(true);
     
-    // 1. Obter o ID do utilizador logado para filtragem
     const userId = this.currentUser()._id; 
 
-    // 2. Construir os parâmetros de consulta para enviar ao backend
+    // Envia o ID para o backend como um parâmetro de consulta
     let params = new HttpParams();
     params = params.set('userId', userId);
     
     try {
-        // 3. Enviar a requisição com o parâmetro de filtragem
-        // O backend deve usar este 'userId' para buscar licitações por IdUsuario OU IdResponsavel
         const backendData = await firstValueFrom(
             this.http.get<Licitacao[]>(`${this.apiBaseUrl}/licitacoes`, { params: params })
         );
@@ -70,7 +65,7 @@ export class TodosService {
     }
   }
 
-  // GET: Obter Utilizadores (Permanece igual, sem filtragem por ID)
+  // GET: Obter Utilizadores
   async fetchUsers(): Promise<void> {
     this.loadingUsers.set(true);
     
@@ -86,7 +81,7 @@ export class TodosService {
     }
   }
   
-  // POST: Adicionar Licitação (Permanece igual)
+  // POST: Adicionar Licitação
   async add(titulo: string, mensagem: string | null, responsavelId: string): Promise<void> {
     const dataToSend = { titulo, mensagem: mensagem || '', responsavelId, completed: false };
     
@@ -101,7 +96,7 @@ export class TodosService {
     }
   }
 
-  // PATCH/PUT: Alternar Estado (Permanece igual)
+  // PATCH/PUT: Alternar Estado
   async toggle(id: string): Promise<void> {
     const currentItem = this._items().find(i => i._id === id);
     if (!currentItem) return;
@@ -123,7 +118,7 @@ export class TodosService {
     }
   }
 
-  // DELETE: Remover Licitação (Permanece igual)
+  // DELETE: Remover Licitação
   async remove(id: string): Promise<void> {
     try {
         await firstValueFrom(

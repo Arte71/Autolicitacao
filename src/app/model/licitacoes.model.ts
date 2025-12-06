@@ -1,17 +1,21 @@
+// src/app/model/licitacoes.model.ts
+
 export interface TabelaItem {
-  itemId: string; // Identificador único do item
-  descricao: string; // Descrição do item
-  catmat?: string; // Código do material (catmat)
-  quantidade_total?: number; // Quantidade inserida pelo usuário
+  itemId: string;
+  descricao: string;
+  catmat?: string;
+  quantidade_total?: number;
 }
 
-// Modelo para a licitação
-// Modelo para a licitação
+// 🚨 NOVO MODELO DE LICITACAO
 export interface Licitacao {
-  _id: string;
-  titulo: string;  // Adicionando o campo 'titulo' de volta
+  _id: string; // ID interno do MongoDB
+  IdLicitacao: string; // ID da licitação usado para rotas
+  TituloLicitacao: string;
+  DataConclusao: string; // ISO
+  NomeOrgao: string;
+  IdResponsavel: string; // ID do responsável
+  IdUsuario: string; // ID do usuário criador
   status: 'rascunho' | 'aberta' | 'encerrada';
-  data_criacao: string; // ISO
-  items: TabelaItem[]; // Lista de itens que fazem parte da licitação
+  items: TabelaItem[];
 }
-

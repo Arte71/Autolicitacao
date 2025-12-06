@@ -1,40 +1,51 @@
 <div class="licitacoes">
-  <h2>Lista de Licitações</h2>
-  <div *ngFor="let licitacao of licitacoes" (click)="selectLicitacao(licitacao)">
-    <div>{{ licitacao._id }}</div>
-    <div>Status: {{ licitacao.status }}</div>
+  <h2>Lista de Licitações Disponíveis</h2>
+  
+    <div *ngFor="let licitacao of licitacoes">
+    
+    <button 
+      [routerLink]="['/relacao-itens', licitacao.IdLicitacao]"
+      (click)="selectLicitacao(licitacao)"> 
+      
+      <div>Título: {{ licitacao.TituloLicitacao }}</div>
+      <div>Órgão: {{ licitacao.NomeOrgao }}</div>
+      <div>Conclusão: {{ licitacao.DataConclusao | date: 'shortDate' }}</div>
+      
+    </button>
   </div>
 
-  <div *ngIf="selectedLicitacao">
-    <h3>Itens de Licitação {{ selectedLicitacao._id }}</h3>
-    <ul>
-      <li *ngFor="let item of selectedLicitacao.items">
-        {{ item.descricao }} - {{ item.quantidade_total }}
-      </li>
-    </ul>
+  <hr>
 
-    <form (ngSubmit)="addItem()">
-      <label for="descricao">Descrição</label>
-      <input id="descricao" [(ngModel)]="itemForm().descricao" name="descricao" required readonly />
+  <div *ngIf="selectedLicitacao">
+    <h3>Itens de Licitação {{ selectedLicitacao.IdLicitacao }} (Edição)</h3>
+    <ul>
+      <li *ngFor="let item of selectedLicitacao.items">
+        {{ item.descricao }} - {{ item.quantidade_total }}
+      </li>
+    </ul>
 
-      <label for="catmat">Código de Material (CatMat)</label>
-      <input id="catmat" [(ngModel)]="itemForm().catmat" name="catmat" readonly />
+    <form (ngSubmit)="addItem()">
+      <label for="descricao">Descrição</label>
+      <input id="descricao" [(ngModel)]="itemForm().descricao" name="descricao" required readonly />
 
-      <label for="quantidade_total">Quantidade</label>
-      <input id="quantidade_total" [(ngModel)]="itemForm().quantidade_total" name="quantidade_total" type="number" required />
+      <label for="catmat">Código de Material (CatMat)</label>
+      <input id="catmat" [(ngModel)]="itemForm().catmat" name="catmat" readonly />
 
-      <div *ngIf="itemForm().quantidade_total <= 0" class="error">
-        Quantidade total deve ser um número maior que 0.
-      </div>
+      <label for="quantidade_total">Quantidade</label>
+      <input id="quantidade_total" [(ngModel)]="itemForm().quantidade_total" name="quantidade_total" type="number" required />
 
-      <button type="submit" [disabled]="!itemForm().descricao || itemForm().quantidade_total <= 0">Adicionar Item</button>
-    </form>
+      <div *ngIf="itemForm().quantidade_total! <= 0" class="error">
+        Quantidade total deve ser um número maior que 0.
+      </div>
 
-    <button (click)="saveLicitacao()">Salvar Alterações</button>
+      <button type="submit" [disabled]="!itemForm().descricao || itemForm().quantidade_total! <= 0">Adicionar Item</button>
+    </form>
 
-    <button (click)="downloadFile()" class="btn">Baixar Arquivo</button>
+    <button (click)="saveLicitacao()">Salvar Alterações</button>
 
-    <input type="file" (change)="onFileSelected($event)" accept=".odt" />
-    <button (click)="uploadFile()" [disabled]="!selectedFile" class="btn">Enviar Arquivo</button>
-  </div>
+    <button (click)="downloadFile()" class="btn">Baixar Arquivo</button>
+
+    <input type="file" (change)="onFileSelected($event)" accept=".odt" />
+    <button (click)="uploadFile()" [disabled]="!selectedFile" class="btn">Enviar Arquivo</button>
+  </div>
 </div>
