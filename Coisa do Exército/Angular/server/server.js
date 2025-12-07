@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const rotasApi = require('./rotas/api');
 app.use('/api', rotasApi);
 
-app.get('/',   async (req, res) => {
+app.get('/', cors(), async (req, res) => {
     res.send('Servidor rodando com sucesso');
 });
 
