@@ -1,9 +1,14 @@
 <nav>
     <ul>
+        <li *ngIf="_auth.loggedIn()">Bem-vindo, {{ _auth.getUserName() }}! Cargo: {{ _auth.getRoles() }}</li>
+
         <app-menu-item label="Inicio" route="/"></app-menu-item>
-        <app-menu-item label="Login" route="login"></app-menu-item>
+
+        <app-menu-item *ngIf="!_auth.loggedIn()" label="Login" route="login"></app-menu-item>
+        <app-menu-item *ngIf="_auth.loggedIn()" label="Logout" route="/" (click)="_auth.logOut()"></app-menu-item>
+
         <app-menu-item label="Registrar" route="register"></app-menu-item>
-        <app-menu-item label="Calendário" route="calendar"></app-menu-item>
+        
         <app-menu-item label="Tarefas" route="todos"></app-menu-item>
         <app-menu-item label="Licitações" route="licitacoes"></app-menu-item>
         <app-menu-item label="Minhas Licitações" route="minhaslicitacoes"></app-menu-item>

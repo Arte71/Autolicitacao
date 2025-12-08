@@ -5,7 +5,7 @@ const tabelaItemSchema = new Schema({
     descricao: { type: String },
     catmat: { type: String },
     unidadeMedida: { type: String },
-    quantidadeTotal: { type: Number },
+    quantidade_total: { type: Number },
     createdAt: { type: Date, default: Date.now }
 });
 

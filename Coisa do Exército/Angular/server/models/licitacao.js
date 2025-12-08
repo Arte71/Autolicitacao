@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const licitacaoSchema = new Schema({
-    titulo: { type: String },
+    titulo: { type: String },//
     createdAt: { type: Date, default: Date.now },
     conclusaoAt: { type: Date },
     tabelaItens: [{ type: Schema.Types.ObjectId, ref: 'tabelaItem' }],

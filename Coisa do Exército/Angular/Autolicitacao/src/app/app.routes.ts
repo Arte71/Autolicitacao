@@ -7,6 +7,9 @@ import { Minhaslicitacoes } from './screens/minhaslicitacoes/minhaslicitacoes';
 import { LoginComponent } from './screens/login/login.component';
 import { Register } from './screens/register/register';
 import { Pesqpreco} from './screens/pesqpreco/pesqpreco';
+import { Auth } from './services/auth';
+import { AuthGuard } from './services/auth-guard';
+import { RelacaoItens } from './generetes/relacao-itens/relacao-itens';
 
 export const routes: Routes = [
 
@@ -15,8 +18,10 @@ export const routes: Routes = [
   { path: 'register', component: Register },
   { path: 'calendar', component: CalendarComponent },
   { path: 'todos', component: TodosComponent },
-  { path: 'licitacoes', component: Licitacoes},
+  { path: 'licitacoes', component: Licitacoes, canActivate: [AuthGuard] },
+  { path: 'minhaslicitacoes', component: Minhaslicitacoes, canActivate: [AuthGuard] },
+  { path: 'pesqpreco', component: Pesqpreco},
   { path: 'minhaslicitacoes', component: Minhaslicitacoes},
-  { path: 'pesqpreco', component: Pesqpreco}
+  { path: 'relacao-itens', component: RelacaoItens}
   
 ];

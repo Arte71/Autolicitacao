@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Auth } from '../../auth';
+import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginUserData = {
     username: '',
-    password: ''
+    password: '',
+    roles: ''
   };
   constructor(private _auth: Auth,
               private _router: Router
@@ -26,7 +27,9 @@ export class LoginComponent implements OnInit {
   loginUser() {
     this._auth.loginUser(this.loginUserData).subscribe(
       (res: any) => {
-        console.log(res);
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('username', res.username);
+        localStorage.setItem('roles', res.roles);
         this._router.navigate(['/']);
       },
       (err: any) => console.log(err)
