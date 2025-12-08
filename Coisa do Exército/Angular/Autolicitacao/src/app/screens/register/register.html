@@ -1,0 +1,28 @@
+<aside>
+  <app-menu></app-menu>
+</aside>
+<form #registerForm="ngForm" (ngSubmit)="registerUser()">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" [(ngModel)]="registerUserData.email" required />
+  <br />
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" [(ngModel)]="registerUserData.username" required />
+  <br />
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" [(ngModel)]="registerUserData.password" required />
+  <br />
+  <label for="roles">Escolha o cargo desse usuário:</label>
+  <select name="roles" id="roles" [(ngModel)]="registerUserData.roles" required>	
+    <option value="demandante">Demandante</option>
+    <option value="autoridade competente">Autoridade Competente</option>
+    <option value="equipe de planejamento">Equipe de Planejamento</option>
+    <option value="admin">admin</option>
+  </select>
+  <br /> 
+  <label for="orgao">Designe um orgão:</label>
+  <select name="orgao" id="orgao" [(ngModel)]="registerUserData.orgao" required>	
+    <option value="departamento ti">Departamento TI</option>
+    <option value="teste">teste</option>
+  </select>
+  <button type="submit" route="/">Register</button>
+</form>

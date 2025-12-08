@@ -1,0 +1,122 @@
+<aside>
+    <app-calendar></app-calendar>
+</aside>
+
+<aside>
+    <app-menu></app-menu>
+</aside>
+
+
+<div>
+    <app-title 
+        main="Aqui eu colocarei as licitações em andamento" 
+        sub="exemplo de aplicação angular">
+    </app-title>
+
+    <div>
+        <button 
+            (click)="openForm()"
+            [disabled]="todosService.loadingUsers()">
+            + Nova Licitação
+        </button>
+        @if (todosService.loadingUsers()) {
+            <span>A carregar utilizadores...</span>
+        }
+    </div>
+
+    <div>
+        @if (todosService.loadingItems()) {
+            <p>A carregar licitações do servidor...</p>
+        } @else {
+            
+            @for(item of todosService.items(); track item._id; let i = $index) {
+                
+                <div title="Item de Licitação">
+                    
+                    <span>
+                        {{ i + 1 }}.
+                    </span>
+
+                    <div>
+                        <span [class.line-through]="item.completed"> 
+                            {{ item.titulo }} 
+                        </span>
+                        
+                        @if (item.completed) {
+                            <span>Concluído</span>
+                        } @else {   
+                            <span>Pendente</span>
+                        }
+                    </div>
+
+                    <div>
+                        <button 
+                            (click)="todosService.toggle(item._id)">
+                            </button>
+                        
+                        <button 
+                            (click)="todosService.remove(item._id)">
+                            X
+                        </button>
+                    </div>
+
+                </div>
+            } @empty {
+                <p>Nenhuma licitação encontrada.</p>
+            }
+        }
+    </div>
+
+    
+    
+
+    @if (isModalOpen()) {
+        <div>
+            <div>
+                <h2>Nova Licitação</h2>
+                
+                <form [formGroup]="licitacaoForm" (ngSubmit)="onSubmit()">
+                    
+                    <div>
+                        <label for="titulo">Nome da Licitação *</label>
+                        <input 
+                            id="titulo" 
+                            type="text" 
+                            formControlName="titulo"
+                            placeholder="Ex: Reforma do Prédio A">
+                    </div>
+
+                    <div>
+                        <label for="msg">Mensagem</label>
+                        <textarea 
+                            id="msg" 
+                            formControlName="mensagem"
+                            placeholder="Escreva uma mensagem para o responsável"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="resp">Usuário Responsável</label>
+                        <select 
+                            id="resp" 
+                            formControlName="responsavel">
+                            <option value="" disabled selected>Selecione um usuário</option>
+                            @for (user of todosService.usersDoMesmoOrgao(); track user._id) {
+                                <option [value]="user._id">{{ user.username }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div>
+                        <button type="button" (click)="closeForm()">Cancelar</button>
+                        <button 
+                            type="submit" 
+                            [disabled]="licitacaoForm.invalid">
+                            Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    }
+</div>

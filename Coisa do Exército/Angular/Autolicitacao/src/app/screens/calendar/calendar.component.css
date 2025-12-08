@@ -1,0 +1,125 @@
+:host {
+  display: block;
+  width: min(90%, 600px); /* antes 50% fixo → agora limita e fica responsivo */
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* container */
+.calendar-root {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+/* topo */
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.cal-header button {
+  background: transparent;
+  border: none;
+  font-size: clamp(1rem, 3vw, 1.5rem); /* responsivo */
+  cursor: pointer;
+}
+
+.month-title {
+  font-weight: 600;
+  font-size: clamp(1rem, 4vw, 1.3rem);
+}
+
+/* cabeçalho da semana */
+.week-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+  color: #555;
+  margin-bottom: 0.4rem;
+}
+
+/* grade dos dias */
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: clamp(0.25rem, 1vw, 0.6rem);
+}
+
+/* dia individual */
+.day {
+  aspect-ratio: 1 / 1.1; /* altura automática → responsivo */
+  border-radius: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(0.3rem, 1vw, 0.6rem);
+  box-sizing: border-box;
+  background: transparent;
+}
+
+/* dia de outro mês */
+.other-month {
+  opacity: 0.4;
+}
+
+/* número do dia */
+.date-num {
+  font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+/* hoje */
+.today {
+  background: #0b69ff;
+  color: #fff;
+}
+
+/* evento */
+.event {
+  background: #ffeb8a;
+}
+
+/* bolinha do evento */
+.event-dot {
+  width: clamp(0.4rem, 1vw, 0.6rem);
+  height: clamp(0.4rem, 1vw, 0.6rem);
+  border-radius: 50%;
+  background: #d99b00;
+  position: relative;
+  margin-top: 0.2rem;
+}
+today-event {
+  position: relative;
+  overflow: hidden;
+}
+
+/* metade azul */
+.today-event::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #0b69ff;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  z-index: 1;
+}
+
+/* metade amarela */
+.today-event::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #ffeb8a;
+  clip-path: polygon(100% 100%, 100% 0, 0 100%);
+  z-index: 1;
+}
+
+/* número do dia fica por cima */
+.today-event .date-num {
+  position: relative;
+  z-index: 2;
+}

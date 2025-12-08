@@ -1,0 +1,34 @@
+
+<div class="calendar-root">
+  <header class="cal-header">
+    <button (click)="prevMonth()">‹</button>
+    <div class="month-title">{{ monthNames[displayMonth] }} {{ displayYear }}</div>
+    <button (click)="nextMonth()">›</button>
+  </header>
+
+  <div class="week-days">
+    @for (d of weekDays; track d) {
+      <div>{{ d }}</div>
+    }
+  </div>
+
+  <div class="days-grid">
+    @for (day of calendarDays; track day.iso) {
+      <div
+        class="day"
+        [class.other-month]="day.otherMonth"
+        [class.today]="day.isToday"
+        [class.event]="day.isEvent"
+        [class.today-event]="day.isTodayEvent"
+        [title]="day.eventTitle || ''">
+
+        <div class="date-num">{{ day.day }}</div>
+
+        @if (day.isEvent) {
+          <div class="event-dot" aria-hidden="true"></div>
+        }
+
+      </div>
+    }
+  </div>
+</div>
