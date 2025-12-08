@@ -1,6 +1,6 @@
 <nav>
     <ul>
-        <li *ngIf="_auth.loggedIn()">Bem-vindo, {{ _auth.getUserName() }}! Cargo: {{ _auth.getRoles() }}</li>
+        <li *ngIf="_auth.loggedIn()">Bem-vindo, {{ _auth.getUserNameFromToken() }}! Cargo: {{ _auth.getRolesFromToken() }}</li>
 
         <app-menu-item label="Inicio" route="/"></app-menu-item>
 

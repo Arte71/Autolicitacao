@@ -1,65 +1,84 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Auth {
 
-  private _registerUrl = "http://localhost:27071/api/register"
-  private _loginUrl = "http://localhost:27071/api/login"
+  private platformId = inject(PLATFORM_ID);
 
-  constructor(private http: HttpClient) { }
+  private safeLocalStorageGet(key: string): string | null {
+    return isPlatformBrowser(this.platformId) ? localStorage.getItem(key) : null;
+  }
+
+  private readonly _token = signal<string | null>(this.safeLocalStorageGet('token'));
+  readonly token = this._token.asReadonly();
+
+  private _registerUrl = "http://localhost:27071/api/register";
+  private _loginUrl = "http://localhost:27071/api/login";
+
+  constructor(private http: HttpClient) {}
 
   registerUser(user: any) {
-    return this.http.post<any>(this._registerUrl, user)
-}
+    return this.http.post<any>(this._registerUrl, user);
+  }
+
   loginUser(user: any) {
-    return this.http.post<any>(this._loginUrl, user)
-}
+    return this.http.post<any>(this._loginUrl, user);
+  }
+
   loggedIn() {
-    return !!localStorage.getItem('token') //verificar se o token existe no localStorage (valor booleano)
+    return this._token() !== null;
+  }
+
+  setToken(token: string) {
+    this._token.set(token);
+
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('token', token);
+    }
   }
 
   logOut() {
-    localStorage.removeItem('token')
+    this._token.set(null);
+
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+    }
   }
 
   getToken() {
-    return localStorage.getItem('token')
+    return this._token();
+  }
+
+  private decodeToken(): any | null {
+    const token = this._token();
+    if (!token) return null;
+
+    try {
+      const payload = window.atob(token.split('.')[1]);
+      return JSON.parse(payload);
+    } catch {
+      return null;
+    }
   }
 
   getUserNameFromToken() {
-    const token = this.getToken();
-    if (!token) return null;
-    const payload = JSON.parse(window.atob(token.split('.')[1]));
-    return payload.username;
+    return this.decodeToken()?.username ?? null;
   }
-  
-  getUserName() {
-  return localStorage.getItem('username');
-}
 
-getRolesFromToken() {
-    const token = this.getToken();
-    if (!token) return null;
-    const payload = JSON.parse(window.atob(token.split('.')[1]));
-    return payload.roles;
+  getRolesFromToken() {
+    return this.decodeToken()?.roles ?? null;
   }
-  
- getRoles() {
-  return localStorage.getItem('roles');
- }
 
-  currentUserId(): number | null {
-    const token = this.getToken();
-    if (!token) return null;
-    const payload = JSON.parse(window.atob(token.split('.')[1]));
-    return payload._id; 
+  currentUserId() {
+    return this.decodeToken()?.subject ?? null;
   }
-  
-  getUserId() {
-  return localStorage.getItem('_id');
+
+  getOrgaoFromToken() {
+    return this.decodeToken()?.orgao ?? null;
+  }
 }
-}
- 

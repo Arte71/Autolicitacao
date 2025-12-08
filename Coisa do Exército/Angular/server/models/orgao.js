@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orgaoSchema = new Schema({
-    nomeOrgao: { type: String, unique: true },
+    nomeOrgao: { type: String, unique: true, default: '' },
     createdAt: { type: Date, default: Date.now }
 });
 

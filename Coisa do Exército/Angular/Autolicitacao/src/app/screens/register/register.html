@@ -15,5 +15,11 @@
     <option value="equipe de planejamento">Equipe de Planejamento</option>
     <option value="admin">admin</option>
   </select>
-  <button type="submit">Register</button>
+  <br /> 
+  <label for="orgao">Designe um orgão:</label>
+  <select name="orgao" id="orgao" [(ngModel)]="registerUserData.orgao" required>	
+    <option value="departamento ti">Departamento TI</option>
+    <option value="teste">teste</option>
+  </select>
+  <button type="submit" route="/">Register</button>
 </form>

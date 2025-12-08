@@ -14,7 +14,8 @@ export class LoginComponent implements OnInit {
   loginUserData = {
     username: '',
     password: '',
-    roles: ''
+    roles: '',
+    orgao: ''
   };
   constructor(private _auth: Auth,
               private _router: Router
@@ -30,7 +31,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', res.token);
         localStorage.setItem('username', res.username);
         localStorage.setItem('roles', res.roles);
-        this._router.navigate(['/']);
+        localStorage.setItem('orgao', res.orgao);
+        this._router.navigate(['/']).then(() => {window.location.reload();});
       },
       (err: any) => console.log(err)
     )

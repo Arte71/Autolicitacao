@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 const db = 'mongodb://localhost:27017/loginDB';
 
 const bcrypt = require('bcrypt');
+const orgao = require('../models/orgao');
 const saltRounds = 10;
 
 async function hashPassword(password) {
@@ -46,8 +47,14 @@ function verifyToken(req, res, next) {
     next();
 }
 
-router.get('/s', async (req, res) => {
-    res.send('Rota /s acessada com sucesso');
+router.get('/users', async (req, res) => {
+    try {
+        let users = await User.find({});
+        res.status(200).send(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
 });
 
 router.post('/register', async (req, res) => {
@@ -60,7 +67,8 @@ router.post('/register', async (req, res) => {
     let payload = { 
   subject: registeredUser._id,
   username: registeredUser.username,
-  roles: registeredUser.roles
+  roles: registeredUser.roles,
+  orgao: registeredUser.orgao
 };
 
 let token = jwt.sign(payload, 'secretKey');
@@ -68,7 +76,8 @@ let token = jwt.sign(payload, 'secretKey');
 res.status(200).send({
   token,
   username: registeredUser.username,
-  roles: registeredUser.roles
+  roles: registeredUser.roles,
+  orgao: registeredUser.orgao
 });
   } catch (error) {
     console.error(error);
@@ -93,10 +102,11 @@ router.post('/login', async (req, res) => {
 
                 let payload = { subject: user._id,
                 username: user.username,
-                roles: user.roles
+                roles: user.roles,
+                orgao: user.orgao
                 };
                 let token = jwt.sign(payload, 'secretKey');
-                res.status(200).send({token, username: user.username, roles: user.roles});
+                res.status(200).send({token, username: user.username, roles: user.roles, orgao: user.orgao});
             }
         }
     } catch (error) {
@@ -115,5 +125,58 @@ try {
 }
 });
 
+router.get('/licitacoes', async (req, res) => {
+    try {
+        let userId = req.query.userId;
+        if (!userId) {
+            return res.status(400).send('userId é obrigatório');
+        }
+        const items = await Licitacao.find({ responsavel: userId }).populate('responsavel').exec();
+        res.status(200).send(items);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
 
+router.post('/licitacoes', verifyToken, async (req, res) => {
+    try {
+        let licitacaoData = req.body;
+        let licitacao = new Licitacao(licitacaoData);
+        let savedLicitacao = await licitacao.save();
+        res.status(200).send(savedLicitacao);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);   
+    }
+});
+
+router.put('/licitacoes/:id', verifyToken, async (req, res) => {
+    try {
+        let id = req.params.id;
+        let licitacaoData = req.body;
+        let updatedLicitacao = await Licitacao.findByIdAndUpdate(id, licitacaoData, { new: true });
+        if (!updatedLicitacao) {
+            return res.status(404).send('Licitacao não encontrada');
+        }
+        res.status(200).send(updatedLicitacao);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);   
+    }
+});
+
+router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
+    try {
+        let id = req.params.id;
+        let deletedLicitacao = await Licitacao.findByIdAndRemove(id);
+        if (!deletedLicitacao) {
+            return res.status(404).send('Licitacao não encontrada');
+        }
+        res.status(200).send(deletedLicitacao);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);   
+    }
+});
 module.exports = router;

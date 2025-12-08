@@ -3,6 +3,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Licitacao, Usuario } from '../model/todo.entity';
+import { Auth } from './auth';
 @Injectable({
   providedIn: 'root',
 })
@@ -20,10 +21,20 @@ export class TodosService {
   loadingItems = signal(false);
   loadingUsers = signal(false);
   
-  // Simulação do Utilizador Logado
-  private readonly currentUser = signal<Usuario>({
-    _id: 'user_1', nomeUsuario: 'Admin Atual', orgao: 'Departamento TI'
-  });
+  constructor(private _auth: Auth) {}
+
+readonly currentUser = computed(() => {
+  const token = this._auth.token(); // signal reativo
+  if (!token) return { _id: null, username: null, roles: [], orgao: null };
+
+  return {
+    _id: this._auth.currentUserId(),
+    username: this._auth.getUserNameFromToken(),
+    roles: this._auth.getRolesFromToken(),
+    orgao: this._auth.getOrgaoFromToken() ?? null
+  };
+});
+
 
   // Exposição dos dados e filtro
   readonly items = this._items.asReadonly();
@@ -46,13 +57,19 @@ export class TodosService {
   async fetchLicitacoes(): Promise<void> {
     this.loadingItems.set(true);
     
-    const userId = this.currentUser()._id; 
+    const userId = this.currentUser()._id;
 
+    if (!userId) {
+      console.error('ID do utilizador não disponível.');
+      this.loadingItems.set(false);
+      return;
+    }
+ 
     // Envia o ID para o backend como um parâmetro de consulta
     let params = new HttpParams();
     params = params.set('userId', userId);
     
-    try {
+    try {//
         const backendData = await firstValueFrom(
             this.http.get<Licitacao[]>(`${this.apiBaseUrl}/licitacoes`, { params: params })
         );

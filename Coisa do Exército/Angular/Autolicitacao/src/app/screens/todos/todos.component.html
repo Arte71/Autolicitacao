@@ -93,7 +93,7 @@
                             formControlName="responsavel">
                             <option value="" disabled selected>Selecione um usuário</option>
                             @for (user of todosService.usersDoMesmoOrgao(); track user._id) {
-                                <option [value]="user._id">{{ user.nomeUsuario }}</option>
+                                <option [value]="user._id">{{ user.username }}</option>
                             }
                         </select>
                     </div>
