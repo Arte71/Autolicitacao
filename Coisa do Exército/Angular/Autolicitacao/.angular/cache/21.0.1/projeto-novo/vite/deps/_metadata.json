@@ -1,0 +1,70 @@
+{
+  "hash": "7f9fe54c",
+  "configHash": "3059b4aa",
+  "lockfileHash": "3fdb0414",
+  "browserHash": "5d3be0d3",
+  "optimized": {
+    "@angular/common": {
+      "src": "../../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
+      "file": "@angular_common.js",
+      "fileHash": "48515a90",
+      "needsInterop": false
+    },
+    "@angular/common/http": {
+      "src": "../../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
+      "file": "@angular_common_http.js",
+      "fileHash": "2239f64a",
+      "needsInterop": false
+    },
+    "@angular/core": {
+      "src": "../../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
+      "file": "@angular_core.js",
+      "fileHash": "27a9b8ed",
+      "needsInterop": false
+    },
+    "@angular/forms": {
+      "src": "../../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
+      "file": "@angular_forms.js",
+      "fileHash": "34a8cdcd",
+      "needsInterop": false
+    },
+    "@angular/platform-browser": {
+      "src": "../../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
+      "file": "@angular_platform-browser.js",
+      "fileHash": "c6d3841c",
+      "needsInterop": false
+    },
+    "@angular/router": {
+      "src": "../../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
+      "file": "@angular_router.js",
+      "fileHash": "b49b6998",
+      "needsInterop": false
+    },
+    "rxjs": {
+      "src": "../../../../../../../node_modules/rxjs/dist/esm5/index.js",
+      "file": "rxjs.js",
+      "fileHash": "968e6a27",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-TILREAH5": {
+      "file": "chunk-TILREAH5.js"
+    },
+    "chunk-DZTTCZDH": {
+      "file": "chunk-DZTTCZDH.js"
+    },
+    "chunk-4J3X4ZF5": {
+      "file": "chunk-4J3X4ZF5.js"
+    },
+    "chunk-MWSBXI7Q": {
+      "file": "chunk-MWSBXI7Q.js"
+    },
+    "chunk-Y5IXNAHJ": {
+      "file": "chunk-Y5IXNAHJ.js"
+    },
+    "chunk-I4ET5GYE": {
+      "file": "chunk-I4ET5GYE.js"
+    }
+  }
+}
