@@ -41,7 +41,7 @@ readonly currentUser = computed(() => {
   
   // Computed: Filtra utilizadores automaticamente baseado no órgão do utilizador atual
   readonly usersDoMesmoOrgao = computed(() => 
-    this._users().filter(u => u.orgao === this.currentUser().orgao)
+    this._users().filter(u => u.orgao === this.currentUser().orgao && u._id !== this.currentUser()._id)
   );
 
   // -------------------------------------------------------------------

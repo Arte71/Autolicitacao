@@ -1,115 +1,69 @@
 // src/app/screens/licitacoes/licitacoes.ts
 
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { LicitacoesService } from '../../services/licitacoes.service';
-import { Licitacao, TabelaItem } from '../../model/licitacoes.model';
-import { HttpClient } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Licitacao } from '../../model/licitacoes.model';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router'; 
+import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
-// aqui tu tem que dar o importe do teu seriço de autenticação
+import { MenuComponent } from '../../components/shared/menu/menu.component';
+
 @Component({
   selector: 'app-licitacoes',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, RouterLink], 
+  imports: [CommonModule, RouterLink, MenuComponent], 
   templateUrl: './licitacoes.html',
   styleUrls: ['./licitacoes.scss'],
 })
 export class Licitacoes implements OnInit {
   
-  // Injeção do serviço de autenticação
-  private readonly _auth = inject(Auth);
-  
+  // 🌟 Sintaxe de injeção moderna para todos os serviços
+  private readonly _auth = inject(Auth);
+  private readonly router = inject(Router);
+  private readonly licitacoesService = inject(LicitacoesService); // 🌟 Injeção atualizada
+
   licitacoes: Licitacao[] = [];
-  selectedLicitacao?: Licitacao;
-  selectedFile?: File;
 
-  itemForm = signal<Partial<TabelaItem>>({//
-    descricao: '',
-    quantidade_total: 0,
-    catmat: '',
-  });
-
-  constructor(
-    private licitacoesService: LicitacoesService,
-    private http: HttpClient
-  ) {}
+  // ❌ O constructor foi removido, pois a injeção é feita acima.
 
   ngOnInit(): void {
     this.loadAll();
   }
-
+  
   loadAll(): void {
-    // 1. Obtém o ID do usuário do _auth
-    const currentUserId = this._auth.currentUserId(); 
-    
+    const currentOrgao = this._auth.getOrgaoFromToken(); 
+    
+    if (!currentOrgao) {
+      console.error('Órgão do usuário não encontrado.');
+      return;
+    }
+
+    // Usa o serviço injetado na propriedade
     this.licitacoesService.getAll().subscribe((allLicitacoes) => {
-      // 2. Aplica a filtragem: Exibir SOMENTE licitações onde o usuário não é responsável nem criador.
       this.licitacoes = allLicitacoes.filter(licitacao => 
-        licitacao.IdResponsavel !== String(currentUserId) && 
-        licitacao.IdUsuario !== String(currentUserId)
-)
+        licitacao.NomeOrgao !== currentOrgao
+      );
     });
   }
 
+  /**
+   * Formata a string para o nome da tabela de itens.
+   * Formato: IdLicitacao_titulo_da_licitacoa_IdUgg
+   */
+  formatarNomeTabela(licitacao: Licitacao): string {
+    // Remove espaços e caracteres especiais e converte para minúsculas
+    const tituloLimpo = licitacao.TituloLicitacao
+      .toLowerCase()
+      .replace(/\s+/g, '_') // Substitui espaços por underscores
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Remove acentos
+
+    return `${licitacao.IdLicitacao}_${tituloLimpo}_${licitacao.IdUgg}`;
+  }
+
+  // Método de navegação (Chamado pelo HTML)
   selectLicitacao(licitacao: Licitacao): void {
-    this.selectedLicitacao = licitacao;
+    const nomeTabela = this.formatarNomeTabela(licitacao);
+    
+    console.log('Nome da Tabela de Itens (Payload para a rota):', nomeTabela);
   }
-
-  addItem(): void {
-    const formValue = this.itemForm();
-    if (!formValue.descricao || (formValue.quantidade_total ?? 0) <= 0 || !formValue.catmat) {
-      return;
-    }
-
-    if (!this.selectedLicitacao) {
-      console.error('Licitação não selecionada!');
-      return;
-    }
-
-    const newItem: TabelaItem = {
-      itemId: (this.selectedLicitacao.items.length + 1).toString(),
-      descricao: formValue.descricao,
-      quantidade_total: formValue.quantidade_total,
-      catmat: formValue.catmat,
-    };
-
-    this.licitacoesService.addItemToLicitacao(this.selectedLicitacao._id, newItem).subscribe((updatedLicitacao) => {
-      this.selectedLicitacao = updatedLicitacao;
-      this.itemForm.set({ descricao: '', quantidade_total: 0, catmat: '' });
-    });
-  }
-
-  saveLicitacao(): void {
-    if (this.selectedLicitacao) {
-      this.licitacoesService.saveChanges(this.selectedLicitacao).subscribe();
-    }
-  }
-
-  downloadFile(): void {
-    const fileUrl = 'assets/arquivo_exemplo.odt';
-    const a = document.createElement('a');
-    a.href = fileUrl;
-    a.download = 'arquivo_exemplo.odt';
-    a.click();
-  }
-
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input?.files?.length) {
-      this.selectedFile = input.files[0];
-    }
-  }
-
-  uploadFile(): void {
-    if (!this.selectedFile) return;
-
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-
-    this.http.post('http://localhost:3000/upload', formData).subscribe((response) => {
-      console.log('Arquivo enviado com sucesso', response);
-    });
-  }
-};
+}

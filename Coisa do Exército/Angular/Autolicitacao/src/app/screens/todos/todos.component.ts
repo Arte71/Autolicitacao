@@ -2,11 +2,12 @@
 
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// O Router não é mais necessário aqui
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { TitleComponent } from '../../components/shared/title/title.component';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { TodosService } from '../../services/todos.service.service';
+import { MenuComponent } from '../../components/shared/menu/menu.component';
+import { Licitacoes } from '../licitacoes/licitacoes';
 
 @Component({
   selector: 'app-todos',
@@ -16,8 +17,9 @@ import { TodosService } from '../../services/todos.service.service';
     CommonModule, 
     ReactiveFormsModule, 
     TitleComponent, 
-    CalendarComponent
-    // LicitacaoItemComponent removido
+    CalendarComponent,
+    MenuComponent,
+    Licitacoes
   ],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.css',

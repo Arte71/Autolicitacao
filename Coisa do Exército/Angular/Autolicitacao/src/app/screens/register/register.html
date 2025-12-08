@@ -1,3 +1,6 @@
+<aside>
+  <app-menu></app-menu>
+</aside>
 <form #registerForm="ngForm" (ngSubmit)="registerUser()">
   <label for="email">Email:</label>
   <input type="email" id="email" name="email" [(ngModel)]="registerUserData.email" required />
