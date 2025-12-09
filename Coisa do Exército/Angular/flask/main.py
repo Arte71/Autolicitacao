@@ -4,6 +4,7 @@ from docx import Document
 import pymupdf
 import pandas as pd
 import os
+import io
 from flask_cors import CORS
 
 
@@ -36,7 +37,8 @@ def gerar_doc():
     dados = request.json  # lista de itens
 
     doc = Document()
-    doc.add_heading("Tabela Gerada", level=1)
+    header = doc.add_heading(level=0)
+    header.text = str(dados[0].get("tableName", ""))
 
     table = doc.add_table(rows=1, cols=4)
     hdr = table.rows[0].cells
@@ -62,7 +64,6 @@ def gerar_doc():
         download_name="documento.docx",
         mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
-
 
 
 def extrairMediana(pdf_path):

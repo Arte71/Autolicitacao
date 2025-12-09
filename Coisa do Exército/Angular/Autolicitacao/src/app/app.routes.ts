@@ -14,6 +14,8 @@ import { Faseinterna } from './screens/faseinterna/faseinterna';
 import { Preencher } from './generetes/preencher/preencher';
 import { RoleGuard } from './services/role-guard';
 import { Gerardoc } from './screens/gerardoc/gerardoc';
+import { Aprovarlicitacao } from './screens/aprovarlicitacao/aprovarlicitacao';
+import path from 'node:path';
 
 export const routes: Routes = [
 
@@ -26,10 +28,9 @@ export const routes: Routes = [
   { path: 'minhaslicitacoes', component: Minhaslicitacoes, canActivate: [AuthGuard] },
   { path: 'pesqpreco', component: Pesqpreco},
   { path: 'minhaslicitacoes', component: Minhaslicitacoes},
-  {path: 'relacao-itens/:nomeTabela', component: RelacaoItens},
-  {path: 'faseinterna', component: Faseinterna},
-  {path: 'preecher/:nomeTabela', component: Preencher},
-  { path: 'gerardoc', component: Gerardoc}
-
-  
+  { path: 'relacao-itens/:nomeTabela', component: RelacaoItens},
+  { path: 'faseinterna', component: Faseinterna},
+  { path: 'preecher/:nomeTabela', component: Preencher},
+  { path: 'gerardoc', component: Gerardoc},
+  { path: 'aprovarlicitacao', component: Aprovarlicitacao, canActivate: [RoleGuard], data: { expectedRole: 'autoridade competente' } },
 ];

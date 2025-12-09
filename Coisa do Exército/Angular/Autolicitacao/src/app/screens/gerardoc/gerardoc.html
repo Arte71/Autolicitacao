@@ -4,6 +4,9 @@
 
   <div *ngFor="let item of itens; let i = index" class="item-card">
       
+      <label>Nom da Tabela:</label>
+      <input [(ngModel)]="item.tableName" name="table{{i}}" required />
+
       <label>Descrição:</label>
       <input [(ngModel)]="item.descricao" name="desc{{i}}" required />
 
@@ -23,5 +26,6 @@
   <button type="button" (click)="adicionarItem()">Adicionar Item</button>
 
   <button type="submit">Gerar Documento</button>
+  <button type="button" (click)="salvarDados()">Salvar Dados</button>
 
 </form>

@@ -217,23 +217,15 @@ router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
         }
     });
 
-    router.post('/tabelaitens/:id', verifyToken, async (req, res) => {
+    router.post('/tabelaitens', verifyToken, async (req, res) => {
         try {
-            let id = req.params.id;
             let itemData = req.body;
-            let licitacao = await Licitacao.findById(id);
-            if (!licitacao) {
-                return res.status(404).send('Licitacao não encontrada');
-            }
-            let newItem = new TabelaItem(itemData);
-            let savedItem = await newItem.save();
-            licitacao.items.push(savedItem._id);
-            await licitacao.save();
-            res.status(200).send(licitacao);
-        }
-        catch (error) {
+            let item = new TabelaItem(itemData);
+            let savedItem = await item.save();
+            res.status(200).send(savedItem);
+        } catch (error) {
             console.error(error);
-            res.status(500).send(error);
+            res.status(500).send(error);   
         }
     });
     

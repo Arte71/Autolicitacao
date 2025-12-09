@@ -14,12 +14,13 @@ import { TabelaItem } from '../../model/licitacoes.model';
 export class Gerardoc {
   
   private apiUrl = 'http://localhost:5000/gerar_doc';
+  private salvarItemUrl = 'http://localhost:27071/api/tabelaitem';
 
   itens: TabelaItem[] = [
     {
       _id: '',
       itemId: '',
-      tableName: 'TabelaA',
+      tableName: '',
       descricao: '',
       unidadeMedida: '',
     }
@@ -31,7 +32,7 @@ export class Gerardoc {
     this.itens.push({
       _id: '',
       itemId: '',
-      tableName: 'TabelaA',
+      tableName: '',
       descricao: '',
       unidadeMedida: '',
     });
@@ -39,6 +40,15 @@ export class Gerardoc {
 
   removerItem(index: number) {
     this.itens.splice(index, 1);
+  }
+
+  salvarDados() {
+    console.log('Salvando dados:', this.itens);
+    this.http.post(this.salvarItemUrl, this.itens)
+      .subscribe({
+        next: (response) => console.log('Dados salvos com sucesso', response),
+        error: (err) => console.error("Erro ao salvar dados", err)
+      });
   }
 
   enviarDados() {

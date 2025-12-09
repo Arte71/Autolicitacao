@@ -17,6 +17,7 @@ titulo: any;
   tituloLicitacao: string;
   dataCriacao: string; // Novo campo
   dataConclusao: string;
+  descricao: string;
   idUgg: string;
   idResponsavel: | {
     _id: string;

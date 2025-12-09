@@ -18,6 +18,7 @@
       
                       <div>Título: **{{ licitacao.tituloLicitacao }}**</div>
                       <div>Órgão: {{ licitacao.idResponsavel.orgao }}</div>
+                      <div>Descrição: {{ licitacao.descricao }}</div>
                       <div>Responsável: {{ licitacao.idResponsavel.nome }}</div>
                       <div>Data Conclusão: {{ licitacao.dataConclusao | date: 'shortDate' }}</div>
                       <div>Status: {{ licitacao.status }}</div> 
