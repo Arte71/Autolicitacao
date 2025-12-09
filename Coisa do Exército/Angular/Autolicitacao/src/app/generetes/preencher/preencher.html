@@ -1,32 +1,57 @@
-<div class="relacao-itens-container">
-    <h2>Detalhes e Itens da Tabela: {{ nomeTabela() }}</h2>
-    <p class="description">Esta é uma visualização **somente leitura** dos itens da licitação.</p>
+<div class="preencher-container">
+    <h2>Composição de Itens da Licitação (ID: {{ nomeTabela() }})</h2>
 
-    @if (itensRelacao().length > 0) {
-        
-        <table class="itens-tabela">
-            <thead>
-                <tr>
-                    <th>ID Item</th>
-                    <th>Descrição do Item</th>
-                    <th>Catmat</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (item of itensRelacao(); track item.itemId) {
-                    <tr>
-                        <td>{{ item.itemId }}</td>
-                        <td>{{ item.descricao }}</td>
-                        <td>{{ item.catmat || 'N/A' }}</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    @if (orgaos().length > 0) {
+        <p>Órgãos Envolvidos: 
+            <strong>
+                @for (orgao of orgaos(); track orgao._id) {
+                    {{ orgao.nomeOrgao }} (ID: {{ orgao._id }}){{ $last ? '' : ', ' }}
+                }
+            </strong>
+        </p>
+    }
 
+    <div class="upload-section">
+            </div>
+
+    <hr>
+
+    <div class="download-section">
+            </div>
+
+    <hr>
+
+    <h3>3. Itens Atuais (Tabela Gerada)</h3>
+        @if (isLoading()) {
+        <div class="loading-state">Carregando itens da tabela e órgãos...</div>
     } @else {
-        <div class="alerta-vazio">
-                        <p>Tabela em produção... aguarde.</p>
-            <small>Nenhum item encontrado para a tabela <strong>{{ nomeTabela() }}</strong>.</small>
-        </div>
+                @if (itensAgregados().length > 0) {
+            <table class="itens-tabela">
+                <thead>
+                    <tr>
+                                                @for (coluna of colunasVisiveis(); track coluna) {
+                            <th>{{ coluna | titlecase }}</th> 
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                                        @for (item of itensAgregados(); track item.itemId) {
+                        <tr>
+                                                        <td>{{ item.itemId }}</td>
+                            <td>{{ item.descricao }}</td>
+                            <td>{{ item.catmat }}</td>
+                            
+                                                        @for (orgao of orgaos(); track orgao._id) {
+                                <td>{{ item.quantidadesPorOrgao[orgao.nomeOrgao] }}</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        } @else {
+            <div class="alerta-vazio">
+                <p>Não foram encontrados itens para **compor** a licitação na tabela **{{ nomeTabela() }}**. Por favor, importe o arquivo.</p>
+            </div>
+        }
     }
 </div>
