@@ -6,11 +6,16 @@ const porta = 27071;
 const app = express();
 app.use(cors());
 
-app.use(express.json());
+app.use(express.json({ type: 'application/json; charset=utf-8' }));
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  next();
+});
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 const rotasApi = require('./rotas/api');
 app.use('/api', rotasApi);
+
 
 app.get('/', cors(), async (req, res) => {
     res.send('Servidor rodando com sucesso');

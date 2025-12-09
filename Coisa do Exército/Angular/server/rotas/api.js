@@ -67,6 +67,7 @@ router.post('/register', async (req, res) => {
     let payload = { 
   subject: registeredUser._id,
   username: registeredUser.username,
+  nome: registeredUser.nome,
   roles: registeredUser.roles,
   orgao: registeredUser.orgao
 };
@@ -76,6 +77,7 @@ let token = jwt.sign(payload, 'secretKey');
 res.status(200).send({
   token,
   username: registeredUser.username,
+  nome: registeredUser.nome,
   roles: registeredUser.roles,
   orgao: registeredUser.orgao
 });
@@ -102,11 +104,12 @@ router.post('/login', async (req, res) => {
 
                 let payload = { subject: user._id,
                 username: user.username,
+                nome: user.nome,
                 roles: user.roles,
                 orgao: user.orgao
                 };
                 let token = jwt.sign(payload, 'secretKey');
-                res.status(200).send({token, username: user.username, roles: user.roles, orgao: user.orgao});
+                res.status(200).send({token, username: user.username, nome: user.nome, roles: user.roles, orgao: user.orgao});
             }
         }
     } catch (error) {
@@ -127,17 +130,31 @@ try {
 
 router.get('/licitacoes', async (req, res) => {
     try {
-        let userId = req.query.userId;
-        if (!userId) {
-            return res.status(400).send('userId é obrigatório');
+        const idResponsavel = req.query.idResponsavel;
+
+        if (!idResponsavel) {
+            return res.status(400).send('ID é obrigatório');
         }
-        const items = await Licitacao.find({ responsavel: userId }).populate('responsavel').exec();
-        res.status(200).send(items);
+
+        const filtro = { 
+            idResponsavel: new mongoose.Types.ObjectId(idResponsavel) 
+        };
+
+        const dados = await Licitacao.find(filtro)
+            .populate('idResponsavel', 'username nome orgao roles')
+            .populate('idUsuario', 'username nome orgao roles')
+            .populate('items', 'descricao quantidade_total unidadeMedida catmat')
+            .populate('orgao', 'nomeOrgao')
+            .exec();
+
+        res.status(200).send(dados);
+
     } catch (error) {
         console.error(error);
         res.status(500).send(error);
     }
 });
+
 
 router.post('/licitacoes', verifyToken, async (req, res) => {
     try {
@@ -178,5 +195,47 @@ router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
         console.error(error);
         res.status(500).send(error);   
     }
+
+    router.get('/tabelaitens', async (req, res) => {
+        try {
+            let itens = await TabelaItem.find({});
+            res.status(200).send(itens);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    });
+
+    router.get('/tabelaitens/:tableName', async (req, res) => {
+        try {
+            let tableName = req.params.tableName;
+            let itens = await TabelaItem.find({ tableName: tableName });
+            res.status(200).send(itens);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    });
+
+    router.post('/tabelaitens/:id', verifyToken, async (req, res) => {
+        try {
+            let id = req.params.id;
+            let itemData = req.body;
+            let licitacao = await Licitacao.findById(id);
+            if (!licitacao) {
+                return res.status(404).send('Licitacao não encontrada');
+            }
+            let newItem = new TabelaItem(itemData);
+            let savedItem = await newItem.save();
+            licitacao.items.push(savedItem._id);
+            await licitacao.save();
+            res.status(200).send(licitacao);
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    });
+    
 });
-module.exports = router;
+module.exports = router; 

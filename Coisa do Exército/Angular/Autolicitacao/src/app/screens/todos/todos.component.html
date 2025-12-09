@@ -2,16 +2,21 @@
     <app-calendar></app-calendar>
 </aside>
 
+<aside>
+    <app-menu></app-menu>
+</aside>
+
+
 <div>
     <app-title 
         main="Aqui eu colocarei as licitações em andamento" 
         sub="exemplo de aplicação angular">
     </app-title>
 
-    <div>
-        <button 
+    <div *ngIf="auth.getRolesFromToken().includes('admin') || auth.getRolesFromToken().includes('autoridade competente')">
+        <button
             (click)="openForm()"
-            [disabled]="todosService.loadingUsers()">
+            [disabled]="todosService.loadingUsers()" >
             + Nova Licitação
         </button>
         @if (todosService.loadingUsers()) {
@@ -34,7 +39,6 @@
 
                     <div>
                         <span [class.line-through]="item.completed"> 
-                            {{ item.titulo }} 
                         </span>
                         
                         @if (item.completed) {
@@ -62,6 +66,9 @@
         }
     </div>
 
+    
+    
+
     @if (isModalOpen()) {
         <div>
             <div>
@@ -70,30 +77,30 @@
                 <form [formGroup]="licitacaoForm" (ngSubmit)="onSubmit()">
                     
                     <div>
-                        <label for="titulo">Nome da Licitação *</label>
+                        <label for="tituloLicitacao">Nome da Licitação *</label>
                         <input 
-                            id="titulo" 
+                            id="tituloLicitacao" 
                             type="text" 
-                            formControlName="titulo"
+                            formControlName="tituloLicitacao"
                             placeholder="Ex: Reforma do Prédio A">
                     </div>
 
                     <div>
-                        <label for="msg">Mensagem</label>
+                        <label for="msg">Descricao</label>
                         <textarea 
                             id="msg" 
-                            formControlName="mensagem"
-                            placeholder="Escreva uma mensagem para o responsável"></textarea>
+                            formControlName="descricao"
+                            placeholder="Escreva uma descricao para o responsável"></textarea>
                     </div>
 
                     <div>
                         <label for="resp">Usuário Responsável</label>
                         <select 
                             id="resp" 
-                            formControlName="responsavel">
+                            formControlName="idResponsavel">
                             <option value="" disabled selected>Selecione um usuário</option>
                             @for (user of todosService.usersDoMesmoOrgao(); track user._id) {
-                                <option [value]="user._id">{{ user.username }}</option>
+                                <option [value]="user._id">{{ user.nome }}</option>
                             }
                         </select>
                     </div>

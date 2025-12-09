@@ -10,6 +10,9 @@ import { Pesqpreco} from './screens/pesqpreco/pesqpreco';
 import { Auth } from './services/auth';
 import { AuthGuard } from './services/auth-guard';
 import { RelacaoItens } from './generetes/relacao-itens/relacao-itens';
+import { Faseinterna } from './screens/faseinterna/faseinterna';
+import { Preencher } from './generetes/preencher/preencher';
+import { RoleGuard } from './services/role-guard';
 
 export const routes: Routes = [
 
@@ -22,6 +25,9 @@ export const routes: Routes = [
   { path: 'minhaslicitacoes', component: Minhaslicitacoes, canActivate: [AuthGuard] },
   { path: 'pesqpreco', component: Pesqpreco},
   { path: 'minhaslicitacoes', component: Minhaslicitacoes},
-  { path: 'relacao-itens', component: RelacaoItens}
+  {path: 'relacao-itens/:nomeTabela', component: RelacaoItens},
+  {path: 'faseinterna', component: Faseinterna},
+  {path: 'preecher/:nomeTabela', component: Preencher}
+
   
 ];

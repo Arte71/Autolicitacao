@@ -1,9 +1,15 @@
+<aside>
+  <app-menu></app-menu>
+</aside>
 <form #registerForm="ngForm" (ngSubmit)="registerUser()">
   <label for="email">Email:</label>
   <input type="email" id="email" name="email" [(ngModel)]="registerUserData.email" required />
   <br />
   <label for="username">Username:</label>
   <input type="text" id="username" name="username" [(ngModel)]="registerUserData.username" required />
+  <br />
+  <label for="nome">Nome Completo:</label>
+  <input type="text" id="nome" name="nome" [(ngModel)]="registerUserData.nome" required />
   <br />
   <label for="password">Password:</label>
   <input type="password" id="password" name="password" [(ngModel)]="registerUserData.password" required />

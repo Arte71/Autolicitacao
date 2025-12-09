@@ -1,0 +1,33 @@
+<aside>
+  <app-menu></app-menu>
+</aside>
+<div class="fase-interna-licitacoes"> //
+  <h2>Fase interna da licitacao</h2>
+  <p>Licitações onde você está listado como Responsavel pela fase interna</p>
+  
+  @if (loading()) {
+    <div class="loading-state">Carregando licitações...</div>
+  } @else {
+
+                @for (licitacao of licitacoes(); track licitacao._id) {
+    
+            <div class="licitacao-item">
+                <button 
+                      [routerLink]="['preecher', formatarNomeTabela(licitacao)]"
+                      (click)="selectLicitacao(licitacao)"> 
+      
+                      <div>Título: **{{ licitacao.tituloLicitacao }}**</div>
+                      <div>Órgão: {{ licitacao.idResponsavel.orgao }}</div>
+                      <div>Responsável: {{ licitacao.idResponsavel.nome }}</div>
+                      <div>Data Conclusão: {{ licitacao.dataConclusao | date: 'shortDate' }}</div>
+                      <div>Status: {{ licitacao.status }}</div> 
+                  </button>
+            </div>
+
+        } @empty {
+            <div class="alerta-vazio">
+                <p>Você não é o responsável por nenhuma licitação no momento.</p>
+            </div>
+        }
+  }
+</div>

@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { response } from 'express';
 import { error } from 'console';
+import { MenuComponent } from '../../components/shared/menu/menu.component';
 
 @Component({
   selector: 'app-pesqpreco',
-  imports: [CommonModule],
+  imports: [CommonModule,
+    MenuComponent
+  ],
   templateUrl: './pesqpreco.html',
   styleUrl: './pesqpreco.css'
 })

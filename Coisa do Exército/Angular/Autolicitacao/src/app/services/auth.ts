@@ -59,8 +59,17 @@ export class Auth {
     if (!token) return null;
 
     try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const payload = window.atob(token.split('.')[1]);
-      return JSON.parse(payload);
+
+      const JsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+      );
+      return JSON.parse(JsonPayload);
     } catch {
       return null;
     }
@@ -80,5 +89,9 @@ export class Auth {
 
   getOrgaoFromToken() {
     return this.decodeToken()?.orgao ?? null;
+  }
+
+  getNomeFromToken() {
+    return this.decodeToken()?.nome ?? null;
   }
 }

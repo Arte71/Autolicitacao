@@ -1,21 +1,41 @@
 // src/app/model/licitacoes.model.ts
 
 export interface TabelaItem {
-  itemId: string;
-  descricao: string;
-  catmat?: string;
-  quantidade_total?: number;
+  _id: string;
+  itemId: string;
+  tableName: string;
+  descricao: string;//
+  catmat?: string;
+  quantidade_total?: number;
+  unidadeMedida: string;
 }
 
-// 🚨 NOVO MODELO DE LICITACAO
 export interface Licitacao {
-  _id: string; // ID interno do MongoDB
-  IdLicitacao: string; // ID da licitação usado para rotas
-  TituloLicitacao: string;
-  DataConclusao: string; // ISO
-  NomeOrgao: string;
-  IdResponsavel: string; // ID do responsável
-  IdUsuario: string; // ID do usuário criador
-  status: 'rascunho' | 'aberta' | 'encerrada';
-  items: TabelaItem[];
+titulo: any;
+  _id: string; 
+  idLicitacao: string 
+  tituloLicitacao: string;
+  dataCriacao: string; // Novo campo
+  dataConclusao: string;
+  idUgg: string;
+  idResponsavel: | {
+    _id: string;
+    username: string;
+    nome: string;
+    orgao: string;
+  };
+  orgao: | {
+    _id: string;
+    NomeOrgao: string;
+  } 
+  idUsuario: | {
+    _id: string;
+    username: string;
+    nome: string;
+    orgao: string;
+  };
+  tabelaItem: [TabelaItem];
+  status: 'rascunho' | 'aberta' | 'encerrada';
+  completed?: boolean;    
+  items: TabelaItem[];
 }
