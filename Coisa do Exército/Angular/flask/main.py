@@ -1,5 +1,6 @@
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, jsonify
 from werkzeug.utils import secure_filename
+from docx import Document
 import pymupdf
 import pandas as pd
 import os
@@ -30,6 +31,40 @@ def uploadPdf():
         return send_file(csv_path, as_attachment=True, download_name='resultado.csv')
     return "Erro ao enviar o arquivo"
 
+@app.post("/gerar_doc")
+def gerar_doc():
+    dados = request.json  # lista de itens
+
+    doc = Document()
+    doc.add_heading("Tabela Gerada", level=1)
+
+    table = doc.add_table(rows=1, cols=4)
+    hdr = table.rows[0].cells
+    hdr[0].text = 'Descrição'
+    hdr[1].text = 'Catmat'
+    hdr[2].text = 'Quantidade'
+    hdr[3].text = 'Unidade'
+
+    for item in dados:
+        row = table.add_row().cells
+        row[0].text = str(item.get("descricao", ""))
+        row[1].text = str(item.get("catmat", ""))
+        row[2].text = str(item.get("quantidade_total", ""))
+        row[3].text = str(item.get("unidadeMedida", ""))
+
+    buffer = io.BytesIO()
+    doc.save(buffer)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="documento.docx",
+        mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+
+
+
 def extrairMediana(pdf_path):
     dataframe = []
     doc = pymupdf.open(pdf_path)
@@ -54,8 +89,7 @@ def extrairMediana(pdf_path):
             print("Texto 'Consolidação dos preços cotados' não encontrado na página.")
     output_csv = 'teste.csv'
     df.to_csv(output_csv, index=False)
-    return output_csv     
+    return output_csv
 
-        
 if __name__ == "__main__":
     app.run(debug=True)

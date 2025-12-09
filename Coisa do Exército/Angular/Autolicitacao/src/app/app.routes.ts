@@ -13,6 +13,7 @@ import { RelacaoItens } from './generetes/relacao-itens/relacao-itens';
 import { Faseinterna } from './screens/faseinterna/faseinterna';
 import { Preencher } from './generetes/preencher/preencher';
 import { RoleGuard } from './services/role-guard';
+import { Gerardoc } from './screens/gerardoc/gerardoc';
 
 export const routes: Routes = [
 
@@ -27,7 +28,8 @@ export const routes: Routes = [
   { path: 'minhaslicitacoes', component: Minhaslicitacoes},
   {path: 'relacao-itens/:nomeTabela', component: RelacaoItens},
   {path: 'faseinterna', component: Faseinterna},
-  {path: 'preecher/:nomeTabela', component: Preencher}
+  {path: 'preecher/:nomeTabela', component: Preencher},
+  { path: 'gerardoc', component: Gerardoc}
 
   
 ];

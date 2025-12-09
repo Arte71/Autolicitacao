@@ -1,0 +1,27 @@
+<h2>Gerar Documento</h2>
+
+<form (ngSubmit)="enviarDados()" #f="ngForm">
+
+  <div *ngFor="let item of itens; let i = index" class="item-card">
+      
+      <label>Descrição:</label>
+      <input [(ngModel)]="item.descricao" name="desc{{i}}" required />
+
+      <label>Catmat:</label>
+      <input [(ngModel)]="item.catmat" name="cat{{i}}" />
+
+      <label>Quantidade total:</label>
+      <input type="number" [(ngModel)]="item.quantidade_total" name="qt{{i}}" />
+
+      <label>Unidade:</label>
+      <input [(ngModel)]="item.unidadeMedida" name="um{{i}}" required />
+
+      <button type="button" (click)="removerItem(i)">Remover</button>
+      <hr />
+  </div>
+
+  <button type="button" (click)="adicionarItem()">Adicionar Item</button>
+
+  <button type="submit">Gerar Documento</button>
+
+</form>
