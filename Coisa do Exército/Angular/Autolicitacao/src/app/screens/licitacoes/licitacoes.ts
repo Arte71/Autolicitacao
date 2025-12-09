@@ -17,50 +17,48 @@ import { MenuComponent } from '../../components/shared/menu/menu.component';
 })
 export class Licitacoes implements OnInit {
   
-  // 🌟 Sintaxe de injeção moderna para todos os serviços
   private readonly _auth = inject(Auth);
   private readonly router = inject(Router);
-  private readonly licitacoesService = inject(LicitacoesService); // 🌟 Injeção atualizada
+  private readonly licitacoesService = inject(LicitacoesService); 
 
   licitacoes: Licitacao[] = [];
-
-  // ❌ O constructor foi removido, pois a injeção é feita acima.
 
   ngOnInit(): void {
     this.loadAll();
   }
   
   loadAll(): void {
-    const currentOrgao = this._auth.getOrgaoFromToken(); 
+    // Assumimos que getOrgaoFromToken() retorna o valor do campo 'orgao' do usuário,
+    // que agora deve ser o ID UGG (o código do órgão).
+    const currentUggId = this._auth.getOrgaoFromToken(); 
     
-    if (!currentOrgao) {
-      console.error('Órgão do usuário não encontrado.');
+    if (!currentUggId) {
+      console.error('ID do Órgão do usuário (Ugg) não encontrado.');
       return;
     }
 
-    // Usa o serviço injetado na propriedade
+    
     this.licitacoesService.getAll().subscribe((allLicitacoes) => {
+      
+      // 
       this.licitacoes = allLicitacoes.filter(licitacao => 
-        licitacao.NomeOrgao !== currentOrgao
+        licitacao.IdUgg !== currentUggId 
       );
     });
   }
 
-  /**
-   * Formata a string para o nome da tabela de itens.
-   * Formato: IdLicitacao_titulo_da_licitacoa_IdUgg
-   */
+
   formatarNomeTabela(licitacao: Licitacao): string {
-    // Remove espaços e caracteres especiais e converte para minúsculas
+    
     const tituloLimpo = licitacao.TituloLicitacao
       .toLowerCase()
-      .replace(/\s+/g, '_') // Substitui espaços por underscores
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Remove acentos
+      .replace(/\s+/g, '_') 
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, ""); 
 
     return `${licitacao.IdLicitacao}_${tituloLimpo}_${licitacao.IdUgg}`;
   }
 
-  // Método de navegação (Chamado pelo HTML)
+
   selectLicitacao(licitacao: Licitacao): void {
     const nomeTabela = this.formatarNomeTabela(licitacao);
     

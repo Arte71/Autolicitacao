@@ -20,3 +20,11 @@ export interface Licitacao {
   status: 'rascunho' | 'aberta' | 'encerrada';
   items: TabelaItem[];
 }
+
+export interface TabelaItem {
+  itemId: string;
+  descricao: string;
+  catmat?: string;
+  quantidade_total?: number;
+  [key: string]: any; 
+}
