@@ -1,12 +1,13 @@
-// src/app/screens/licitacoes/licitacoes.ts
+// src/app/screens/licitacoes/licitacoes.ts (CÓDIGO MODERNO E ADAPTADO)
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core'; // Usando 'signal'
 import { LicitacoesService } from '../../services/licitacoes.service';
 import { Licitacao } from '../../model/licitacoes.model';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { MenuComponent } from '../../components/shared/menu/menu.component';
+import { toSignal } from '@angular/core/rxjs-interop'; // Importação moderna
 
 @Component({
   selector: 'app-licitacoes',
@@ -15,53 +16,54 @@ import { MenuComponent } from '../../components/shared/menu/menu.component';
   templateUrl: './licitacoes.html',
   styleUrls: ['./licitacoes.scss'],
 })
-export class Licitacoes implements OnInit {
+export class Licitacoes {
   
   private readonly _auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly licitacoesService = inject(LicitacoesService); 
-
-  licitacoes: Licitacao[] = [];
-
-  ngOnInit(): void {
-    this.loadAll();
-  }
   
-  loadAll(): void {
-    // Assumimos que getOrgaoFromToken() retorna o valor do campo 'orgao' do usuário,
-    // que agora deve ser o ID UGG (o código do órgão).
-    const currentUggId = this._auth.getOrgaoFromToken(); 
+  
+  private readonly currentUggId = this._auth.getOrgaoFromToken();
+
+  
+  private allLicitacoesSignal = toSignal(this.licitacoesService.getAll(), { initialValue: [] as Licitacao[] });
+
+ 
+  licitacoes = signal<Licitacao[]>([]);
+
+  constructor() {
     
-    if (!currentUggId) {
+    this.applyFilter();
+  }
+
+  private applyFilter(): void {
+    if (!this.currentUggId) {
       console.error('ID do Órgão do usuário (Ugg) não encontrado.');
+      this.licitacoes.set([]);
       return;
     }
 
+
+    const all = this.allLicitacoesSignal();
     
-    this.licitacoesService.getAll().subscribe((allLicitacoes) => {
-      
-      // 
-      this.licitacoes = allLicitacoes.filter(licitacao => 
-        licitacao.IdUgg !== currentUggId 
-      );
-    });
+
+    const filtered = all.filter(licitacao => 
+      licitacao.IdUgg !== this.currentUggId 
+    );
+    
+    this.licitacoes.set(filtered);
   }
-
-
+  
+ 
   formatarNomeTabela(licitacao: Licitacao): string {
-    
-    const tituloLimpo = licitacao.TituloLicitacao
-      .toLowerCase()
-      .replace(/\s+/g, '_') 
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, ""); 
-
-    return `${licitacao.IdLicitacao}_${tituloLimpo}_${licitacao.IdUgg}`;
+  
+    return licitacao._id;
   }
 
 
   selectLicitacao(licitacao: Licitacao): void {
     const nomeTabela = this.formatarNomeTabela(licitacao);
     
-    console.log('Nome da Tabela de Itens (Payload para a rota):', nomeTabela);
+    console.log('ID da Licitação (Payload para a rota):', nomeTabela);
   }
 }

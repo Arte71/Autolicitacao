@@ -47,21 +47,10 @@ export class Faseinterna implements OnInit {
     });
   }
 
-  formatarNomeTabela(licitacao: Licitacao): string {
-    
-    const tituloLimpo = licitacao.TituloLicitacao
-      .toLowerCase()
-      .replace(/\s+/g, '_')
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-
-    const idLicitacao = licitacao.IdLicitacao;
-    const idUgg = licitacao.IdUgg || '00'; 
-
-    return `${idLicitacao}_${tituloLimpo}_${idUgg}`;
+  // 🌟 FUNÇÃO MODIFICADA 🌟
+  PegarId(licitacao: Licitacao): string {
+    // Retorna apenas o ID da licitação
+    return licitacao._id;
   }
 
-  selectLicitacao(licitacao: Licitacao): void {
-    const nomeTabela = this.formatarNomeTabela(licitacao);
-    console.log('Licitação selecionada para preenchimento:', nomeTabela);
-  }
 }

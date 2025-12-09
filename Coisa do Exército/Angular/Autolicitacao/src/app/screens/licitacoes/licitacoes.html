@@ -1,26 +1,23 @@
-<aside>
-  <app-menu></app-menu>
-</aside>
 <div class="licitacoes">
   <h2>Lista de Licitações Externas Disponíveis</h2>
   
-    @for (licitacao of licitacoes; track licitacao.IdLicitacao) {
+        @for (licitacao of licitacoes(); track licitacao._id) { 
     
     <div class="licitacao-item-wrapper"> 
-                <button 
-            [routerLink]="['/relacao-itens', formatarNomeTabela(licitacao)]"
-            (click)="selectLicitacao(licitacao)"> 
+                <button 
+            [routerLink]="['/relacao-itens', formatarNomeTabela(licitacao)]"
+            (click)="selectLicitacao(licitacao)"> 
       
-            <div>Título: **{{ licitacao.TituloLicitacao }}**</div>
-            <div>Órgão: {{ licitacao.NomeOrgao }}</div>
-            <div>Conclusão: {{ licitacao.DataConclusao | date: 'shortDate' }}</div>
+            <div>Título: **{{ licitacao.TituloLicitacao }}**</div>
+            <div>Órgão: {{ licitacao.NomeOrgao }}</div>
+            <div>Conclusão: {{ licitacao.DataConclusao | date: 'shortDate' }}</div>
       
-        </button>
+        </button>
     </div>
 
   } @empty {
-    <div class="alerta-vazio">
-        <p>Nenhuma licitação externa encontrada para visualização.</p>
-    </div>
+    <div class="alerta-vazio">
+        <p>Nenhuma licitação externa encontrada para visualização.</p>
+    </div>
   }
 </div>

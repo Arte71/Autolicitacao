@@ -1,119 +1,97 @@
-// src/app/screens/preencher/preencher.ts
+// src/app/screens/generetes/relacao-itens/relacao-itens.ts (CÓDIGO CORRIGIDO E SIMPLIFICADO)
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { LicitacoesService } from '../../services/licitacoes.service'; 
+import { LicitacoesService } from '../../services/licitacoes.service';
+// Importa apenas o modelo simples que este componente exibe
 import { TabelaItem } from '../../model/licitacoes.model'; 
-import { Pesqpreco } from '../../screens/pesqpreco/pesqpreco'; 
-import { lastValueFrom, Observable } from 'rxjs'; // lastValueFrom para async/await
+import { toSignal, toObservable } from '@angular/core/rxjs-interop'; 
+import { switchMap, map } from 'rxjs/operators';
+import { of } from 'rxjs'; 
 
 @Component({
-  selector: 'app-preencher',
+  selector: 'app-relacao-itens',
   standalone: true,
-  imports: [CommonModule, Pesqpreco],
-  templateUrl: './preencher.html',
-  styleUrl: './preencher.scss',
+  imports: [CommonModule], 
+  templateUrl: './relacao-itens.html',
+  styleUrl: './relacao-itens.scss',
 })
-export class Preencher implements OnInit {
+export class RelacaoItens { 
 
   private readonly route = inject(ActivatedRoute);
   private readonly licitacoesService = inject(LicitacoesService);
 
-  nomeTabela: string = '';
-  itensTabela: TabelaItem[] = [];
-  isLoading: boolean = true;
-  
-  colunasVisiveis: string[] = []; 
-  selectedFile: File | null = null; 
-  isUploading: boolean = false; 
-  
-  readonly caminhoModeloArquivo: string = 'assets/modelo/modelo_de_arquivo.xlsx'; 
-  
+  // 1. Extrai o parâmetro de rota (ID da Licitação) para um Signal
+  readonly nomeTabelaSignal = toSignal(
+    this.route.paramMap.pipe(
+      map(params => params.get('nomeTabela') || '') 
+    ),
+    { initialValue: '' } as { initialValue: string } 
+  );
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const nomeTabelaParam = params.get('nomeTabela');
-      if (nomeTabelaParam) {
-        this.nomeTabela = nomeTabelaParam;
-        this.loadItens();
-      } else {
-        this.isLoading = false;
-        console.error('Parâmetro nomeTabela não encontrado na rota.');
-      }
-    });
-  }
-
-  loadItens(): void {
-    this.isLoading = true;
-    this.licitacoesService.getItensByTableName(this.nomeTabela).subscribe({
-      next: (data) => {
-        this.itensTabela = data.map(item => this.processItem(item));
-        
-        // GERAÇÃO DINÂMICA DAS COLUNAS
-        if (this.itensTabela.length > 0) {
-            this.colunasVisiveis = Object.keys(this.itensTabela[0]);
-        } else {
-            // Cabeçalho padrão caso a lista esteja vazia
-            this.colunasVisiveis = ['itemId', 'descricao', 'catmat', 'quantidade_total'];
-        }
-
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Erro ao carregar itens da tabela:', err);
-        this.isLoading = false;
-        this.itensTabela = []; 
-        this.colunasVisiveis = ['itemId', 'descricao', 'catmat', 'quantidade_total'];
-      }
-    });
+  // 🌟 NomeTabela para uso no template (acessado via nomeTabelaSignal()) 🌟
+  public get nomeTabela(): string {
+    return this.nomeTabelaSignal();
   }
   
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    this.selectedFile = file || null;
-  }
+  // 2. Converte o Signal de volta para Observable para usar operadores RxJS.
+  readonly nomeTabelaObservable = toObservable(this.nomeTabelaSignal);
+
+
+  // 3. Dispara a chamada ao serviço e NORMALIZA OS DADOS
+  readonly itensRelacao = toSignal(
+    this.nomeTabelaObservable.pipe(
+      switchMap(tabelaId => {
+        if (tabelaId) {
+          // Retorna um Observable<any> (pois a estrutura pode ser arrays paralelos)
+          return this.licitacoesService.getItensByTableName(tabelaId);
+        }
+        return of<TabelaItem[]>([]);
+      }),
+      // Aplica a normalização para garantir que o formato final seja TabelaItem[]
+      map(data => this.normalizeItems(data)) 
+    ),
+    { initialValue: [] as TabelaItem[] }
+  );
   
-  async handleFileUpload(): Promise<void> {
-    if (!this.selectedFile || !this.nomeTabela) {
-      console.error('Arquivo ou nome da tabela ausente.');
-      return;
-    }
+  /**
+   * Converte arrays paralelos de propriedades em um array de objetos TabelaItem.
+   */
+  normalizeItems(data: any): TabelaItem[] {
+    
+    // Interface interna para lidar com a tipagem do objeto de arrays paralelos.
+    interface RawItemArrays { 
+        itemId?: any[]; 
+        descricao?: any[]; 
+        catmat?: any[]; 
+        [key: string]: any[]; 
+    }
 
-    this.isUploading = true;
-    const formData = new FormData();
-    formData.append('file', this.selectedFile, this.selectedFile.name);
-    formData.append('nomeTabela', this.nomeTabela); 
+    // Caso 1: Se o backend retornou um array de objetos (TabelaItem[]), apenas retorna.
+    if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object' && 'itemId' in data[0]) {
+      return data; 
+    }
 
-    const uploadUrl = 'http://localhost:3000/api/upload-itens'; 
-    
-    try {
-      const response = await lastValueFrom(
-        this.licitacoesService.uploadFile(uploadUrl, formData) // Chama o método do serviço
-      );
-      
-      console.log('Upload bem-sucedido:', response);
-      alert('Arquivo enviado com sucesso!');
-      this.loadItens(); // Recarrega os dados para exibir os itens importados
-      
-    } catch (error) {
-      console.error('Erro durante o upload do arquivo:', error);
-      alert('Falha ao enviar o arquivo. Verifique o console.');
-    } finally {
-      this.isUploading = false;
-      this.selectedFile = null; 
-    }
-  }
+    // Caso 2: Dados vêm como arrays paralelos dentro de um único objeto.
+    const rawData = data as RawItemArrays;
+    
+    const length = rawData.itemId?.length || rawData.descricao?.length || rawData.catmat?.length || 0;
+    
+    if (length === 0) {
+        return [];
+    }
 
-  processItem(item: TabelaItem): TabelaItem {
-    return Object.entries(item).reduce((acc, [key, value]) => {
-        const processedValue = (value === null || value === undefined) ? 0 : value;
-        acc[key as keyof TabelaItem] = processedValue as any; 
-        return acc;
-    }, { ...item } as TabelaItem); 
-  }
-
-  downloadModelo(): void {
-    console.log('Caminho para download do modelo:', this.caminhoModeloArquivo);
-  }
+    const normalized: TabelaItem[] = [];
+    for (let i = 0; i < length; i++) {
+        normalized.push({
+            itemId: String(rawData.itemId?.[i] || ''), // Garante que itemId é string
+            descricao: String(rawData.descricao?.[i] || ''), // Garante que descricao é string
+            catmat: rawData.catmat?.[i] ? String(rawData.catmat?.[i]) : undefined,
+            // Não incluímos aqui outras propriedades complexas (como quantidadesPorOrgao)
+            // pois este componente só precisa dos campos básicos definidos em TabelaItem.
+        } as TabelaItem);
+    }
+    return normalized;
+  }
 }

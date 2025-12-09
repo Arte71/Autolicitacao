@@ -1,73 +1,32 @@
-<div class="preencher-container">
-    <h2>Composição de Itens da Licitação: {{ nomeTabela }}</h2>
+<div class="relacao-itens-container">
+    <h2>Detalhes e Itens da Tabela: {{ nomeTabela() }}</h2>
+    <p class="description">Esta é uma visualização **somente leitura** dos itens da licitação.</p>
 
-    <div class="upload-section">
-        <h3>1. Importar Itens</h3>
-        <p>Utilize esta seção para enviar o arquivo com os itens que compõem a licitação.</p>
-        
-        <input 
-            type="file" 
-            (change)="onFileSelected($event)" 
-            accept=".csv, .xlsx" 
-            [disabled]="isUploading"
-        >
-        
-        <button 
-            (click)="handleFileUpload()" 
-            [disabled]="!selectedFile || isUploading">
-            @if (isUploading) {
-                Enviando Arquivo...
-            } @else {
-                Enviar Arquivo
-            }
-        </button>
-        
-        @if (selectedFile) {
-            <p class="file-info">Arquivo pronto para envio: <strong>{{ selectedFile.name }}</strong></p>
-        }
-    </div>
+    @if (itensRelacao().length > 0) {
+        
+        <table class="itens-tabela">
+            <thead>
+                <tr>
+                    <th>ID Item</th>
+                    <th>Descrição do Item</th>
+                    <th>Catmat</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of itensRelacao(); track item.itemId) {
+                    <tr>
+                        <td>{{ item.itemId }}</td>
+                        <td>{{ item.descricao }}</td>
+                        <td>{{ item.catmat || 'N/A' }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-    <hr>
-
-    <div class="download-section">
-        <h3>2. Modelo de Arquivo</h3>
-        <p>Faça o download do **modelo** para garantir o formato correto.</p>
-        <a [href]="caminhoModeloArquivo" download="modelo_de_arquivo.xlsx" class="btn-download">
-            Baixar Modelo de Arquivo
-        </a>
-        <small>Caminho para baixar o arquivo: **{{ caminhoModeloArquivo }}**</small>
-    </div>
-
-    <hr>
-
-    <h3>3. Itens Atuais (Tabela Gerada)</h3>
-    @if (isLoading) {
-        <div class="loading-state">Carregando itens da tabela...</div>
-    } @else {
-        
-        @if (itensTabela.length > 0) {
-            <table class="itens-tabela">
-                <thead>
-                    <tr>
-                        @for (coluna of colunasVisiveis; track coluna) {
-                            <th>{{ coluna | titlecase }}</th> 
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (item of itensTabela; track item.itemId) {
-                        <tr>
-                            @for (coluna of colunasVisiveis; track coluna) {
-                                <td>{{ item[coluna] }}</td>
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        } @else {
-            <div class="alerta-vazio">
-                <p>Não foram encontrados itens para **compor** a licitação na tabela **{{ nomeTabela }}**. Por favor, importe o arquivo.</p>
-            </div>
-        }
-    }
+    } @else {
+        <div class="alerta-vazio">
+                        <p>Tabela em produção... aguarde.</p>
+            <small>Nenhum item encontrado para a tabela <strong>{{ nomeTabela() }}</strong>.</small>
+        </div>
+    }
 </div>

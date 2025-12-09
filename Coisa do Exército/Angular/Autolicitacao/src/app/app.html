@@ -1,1 +1,12 @@
-<router-outlet></router-outlet>
+<div class="main-layout">
+    
+    @if (showMenu()) {
+        <aside>
+            <app-menu></app-menu>
+        </aside>
+    }
+    
+    <main>
+        <router-outlet></router-outlet>
+    </main>
+</div>

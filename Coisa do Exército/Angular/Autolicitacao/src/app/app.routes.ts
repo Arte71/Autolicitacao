@@ -15,7 +15,7 @@ import { Preencher } from './generetes/preencher/preencher';
 
 export const routes: Routes = [
 
-  { path: '', component: PageComponent }, // rota padrão
+  { path: '', component: TodosComponent }, // rota padrão
   { path: 'login', component: LoginComponent },
   { path: 'register', component: Register },
   { path: 'calendar', component: CalendarComponent },
@@ -26,7 +26,7 @@ export const routes: Routes = [
   { path: 'minhaslicitacoes', component: Minhaslicitacoes},
   {path: 'relacao-itens/:nomeTabela', component: RelacaoItens},
   {path: 'faseinterna', component: Faseinterna},
-  {path: 'preecher/:nomeTabela', component: Preencher}
+  {path: 'preencher/:nomeTabela', component: Preencher}
 
   
 ];
