@@ -10,5 +10,9 @@ export class RoleGuard {
   constructor(private _auth: Auth) {}
 canActivate(route: ActivatedRouteSnapshot): boolean {
   const userRole = this._auth.getRolesFromToken();
-  return route.data['roles'].includes(userRole);
+  const permissao = route.data['roles'].includes(userRole);
+  if (!permissao) {
+    alert('Acesso negado. Você não tem permissão para acessar esta página.');
+  }
+  return permissao;
 }}

@@ -22,24 +22,34 @@ export class Auth {
 
   constructor(private http: HttpClient) {}
 
-  registerUser(user: any) {
-    return this.http.post<any>(this._registerUrl, user);
-  }
-
-  loginUser(user: any) {
-    return this.http.post<any>(this._loginUrl, user);
-  }
-
-  loggedIn() {
-    return this._token() !== null;
-  }
-
   setToken(token: string) {
     this._token.set(token);
 
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('token', token);
     }
+  }
+
+  registerUser(user: any) {
+    return this.http.post<any>(this._registerUrl, user);
+  }
+
+  loginUser(user: any) {;
+    return this.http.post<any>(this._loginUrl, user);
+  }
+
+  setUserData(res: any) {
+    this.setToken(res.token);
+
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('username', res.username);
+      localStorage.setItem('roles', res.roles);
+      localStorage.setItem('orgao', res.orgao);
+    }
+  }
+
+  loggedIn() {
+    return this._token() !== null;
   }
 
   logOut() {

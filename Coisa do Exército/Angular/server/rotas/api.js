@@ -196,7 +196,7 @@ router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
         res.status(500).send(error);   
     }
 
-    router.get('/tabelaitens', async (req, res) => {
+router.get('/tabelaitens', async (req, res) => {
         try {
             let itens = await TabelaItem.find({});
             res.status(200).send(itens);
@@ -206,7 +206,7 @@ router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
         }
     });
 
-    router.get('/tabelaitens/:tableName', async (req, res) => {
+router.get('/tabelaitens/:tableName', async (req, res) => {
         try {
             let tableName = req.params.tableName;
             let itens = await TabelaItem.find({ tableName: tableName });
@@ -216,20 +216,21 @@ router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
             res.status(500).send(error);
         }
     });
+});
 
-    router.post('/tabelaitens', verifyToken, async (req, res) => {
+router.post('/tabelaitens', verifyToken, async (req, res) => {
         try {
-            let itemData = req.body;
-            let item = new TabelaItem(itemData);
-            let savedItem = await item.save();
-            res.status(200).send(savedItem);
+        let itemData = req.body;
+        let item = new TabelaItem(itemData);
+        let savedItem = await item.save();
+        res.status(200).send(savedItem);
         } catch (error) {
             console.error(error);
             res.status(500).send(error);   
         }
-    });
+});
 
-    router.get('/orgaos', async (req, res) => {
+router.get('/orgaos', async (req, res) => {
         try {
             let orgaos = await Orgao.find({});
             res.status(200).send(orgaos);
@@ -237,6 +238,5 @@ router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
             console.error(error);
             res.status(500).send(error);
         }
-    });
 });
 module.exports = router; 

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TabelaItem } from '../../model/licitacoes.model';
+import { Auth } from '../../services/auth';
+
 
 @Component({
   selector: 'app-gerardoc',
@@ -15,6 +17,7 @@ export class Gerardoc {
   
   private apiUrl = 'http://localhost:5000/gerar_doc';
   private salvarItemUrl = 'http://localhost:27071/api/tabelaitens';
+  
 
   itens: TabelaItem[] = [
     {
@@ -26,7 +29,9 @@ export class Gerardoc {
     }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient
+              , protected _auth: Auth
+  ) {}
 
   adicionarItem() {
     this.itens.push({
@@ -40,8 +45,10 @@ export class Gerardoc {
   removerItem(index: number) {
     this.itens.splice(index, 1);
   }
+  
 
-  salvarDados() {
+  salvarDados() {//
+    const token = this._auth.token();
     console.log('Salvando dados:', this.itens);
     this.http.post(this.salvarItemUrl, this.itens)
       .subscribe({

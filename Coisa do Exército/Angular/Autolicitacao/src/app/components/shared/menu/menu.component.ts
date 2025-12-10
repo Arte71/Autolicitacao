@@ -1,5 +1,3 @@
-// src/app/components/shared/menu/menu.component.ts
-
 import { Component } from '@angular/core';
 import { MenuItemComponent } from '../menu-item/menu-item.component';
 import { Auth } from '../../../services/auth';

@@ -1,2 +1,24 @@
-<meta charset="UTF-8">
-<router-outlet></router-outlet>
+<div class="main-layout">
+    
+    @if (!isLoginPage()) {
+        <button 
+            class="hamburger-menu" 
+            (click)="toggleMenu()" 
+            [class.is-active]="displayMenu()"
+            aria-label="Toggle Navigation Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    }
+
+    @if (!isLoginPage()) {
+        <aside class="sidebar-menu" [class.open]="displayMenu()">
+            <app-menu></app-menu>
+        </aside>
+    }
+
+    <main>
+        <router-outlet></router-outlet>
+    </main>
+</div>

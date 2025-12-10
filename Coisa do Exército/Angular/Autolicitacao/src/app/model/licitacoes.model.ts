@@ -1,7 +1,7 @@
 // src/app/model/licitacoes.model.ts
 
 export interface TabelaItem {
-  _id: string;
+  _id?: string
   itemId: string;
   tableName?: string;
   descricao: string;//

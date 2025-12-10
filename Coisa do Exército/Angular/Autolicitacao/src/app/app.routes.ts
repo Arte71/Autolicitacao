@@ -19,18 +19,31 @@ import path from 'node:path';
 
 export const routes: Routes = [
 
-  { path: '', component: PageComponent }, // rota padrão
+
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: Register },
-  { path: 'calendar', component: CalendarComponent },
-  { path: 'todos', component: TodosComponent },
-  { path: 'licitacoes', component: Licitacoes, canActivate: [AuthGuard] },
-  { path: 'minhaslicitacoes', component: Minhaslicitacoes, canActivate: [AuthGuard] },
-  { path: 'pesqpreco', component: Pesqpreco},
-  { path: 'minhaslicitacoes', component: Minhaslicitacoes},
-  { path: 'relacao-itens/:nomeTabela', component: RelacaoItens},
-  { path: 'faseinterna', component: Faseinterna},
-  { path: 'preecher/:nomeTabela', component: Preencher},
-  { path: 'gerardoc', component: Gerardoc},
-  { path: 'aprovarlicitacao', component: Aprovarlicitacao, canActivate: [RoleGuard], data: { expectedRole: 'autoridade competente' } },
+  { path: 'register', component: Register, canActivate: [RoleGuard], data: { roles: ['autoridade competente', 'admin'] } },
+  { path: '', component: PageComponent }, 
+
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'calendar', component: CalendarComponent },
+      { path: 'todos', component: TodosComponent },
+      { path: 'licitacoes', component: Licitacoes },
+      { path: 'minhaslicitacoes', component: Minhaslicitacoes },
+      { path: 'pesqpreco', component: Pesqpreco },
+      { path: 'relacao-itens/:nomeTabela', component: RelacaoItens },
+      { path: 'faseinterna', component: Faseinterna },
+      { path: 'preecher/:nomeTabela', component: Preencher },
+      { path: 'gerardoc', component: Gerardoc },
+
+      { 
+        path: 'aprovarlicitacao',
+        component: Aprovarlicitacao,
+        canActivate: [RoleGuard],
+        data: { expectedRole: 'autoridade competente' }
+      },
+    ],
+  },
 ];

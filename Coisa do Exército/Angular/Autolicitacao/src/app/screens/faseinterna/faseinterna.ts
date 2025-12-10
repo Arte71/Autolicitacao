@@ -1,8 +1,6 @@
-// src/app/screens/faseinterna/faseinterna.ts
-
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { TodosService } from '../../services/todos.service.service';
 import { Licitacao } from '../../model/licitacoes.model';
 import { MenuComponent } from '../../components/shared/menu/menu.component'; 
@@ -10,7 +8,7 @@ import { MenuComponent } from '../../components/shared/menu/menu.component';
 @Component({
   selector: 'app-faseinterna',
   standalone: true,
-  imports: [CommonModule, RouterLink, MenuComponent], 
+  imports: [CommonModule, MenuComponent], 
   templateUrl: './faseinterna.html',
   styleUrl: './faseinterna.scss',
 })

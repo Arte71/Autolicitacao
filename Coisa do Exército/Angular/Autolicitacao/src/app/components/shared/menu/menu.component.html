@@ -9,10 +9,10 @@
 
         <app-menu-item label="Registrar" route="register"></app-menu-item>
         
-        <app-menu-item label="Tarefas" route="todos"></app-menu-item>
-        <app-menu-item label="Licitações" route="licitacoes"></app-menu-item>
-        <app-menu-item label="Minhas Licitações" route="minhaslicitacoes"></app-menu-item>
-        <app-menu-item label ="Fase Interna" route = "faseinterna"></app-menu-item>
-        <app-menu-item label ="Gerar Documento" route = "gerardoc"></app-menu-item>
+        <app-menu-item *ngIf="_auth.loggedIn()" label="Tarefas" route="todos"></app-menu-item>
+        <app-menu-item *ngIf="_auth.loggedIn()" label="Licitações" route="licitacoes"></app-menu-item>
+        <app-menu-item *ngIf="_auth.loggedIn()" label="Minhas Licitações" route="minhaslicitacoes"></app-menu-item>
+        <app-menu-item *ngIf="_auth.loggedIn()" label ="Fase Interna" route = "faseinterna"></app-menu-item>
+        <app-menu-item *ngIf="_auth.loggedIn()" label ="Extrair Mediana (Pesquisa Preço)" route = "pesqpreco"></app-menu-item>
     </ul>
 </nav>

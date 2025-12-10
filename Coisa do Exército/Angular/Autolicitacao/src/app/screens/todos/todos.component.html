@@ -77,12 +77,13 @@
                 <form [formGroup]="licitacaoForm" (ngSubmit)="onSubmit()">
                     
                     <div>
-                        <label for="tituloLicitacao">Nome da Licitação *</label>
+                        <label for="tituloLicitacao">Nome da Licitação (Apenas Caractéres) *</label>
                         <input 
                             id="tituloLicitacao" 
                             type="text" 
                             formControlName="tituloLicitacao"
-                            placeholder="Ex: Reforma do Prédio A">
+                            placeholder="Ex: Reforma do Prédio A"
+                            pattern="[A-Za-z]">
                     </div>
 
                     <div>

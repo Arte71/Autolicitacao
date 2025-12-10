@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const tabelaItemSchema = new Schema({
-    tableName: { type: String, required: true },
+    tableName: { type: String, required: false },
     descricao: { type: String },
     catmat: { type: String },
     unidadeMedida: { type: String },

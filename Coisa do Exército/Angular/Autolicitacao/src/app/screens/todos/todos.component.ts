@@ -48,6 +48,7 @@ export class TodosComponent {
   openForm() {
     this.isModalOpen.set(true);
   }
+  
 
   closeForm() {
     this.isModalOpen.set(false);

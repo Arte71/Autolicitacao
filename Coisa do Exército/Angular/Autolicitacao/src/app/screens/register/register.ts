@@ -26,12 +26,37 @@ export class Register implements OnInit {
               private _router: Router
   ) { }
   ngOnInit(): void {
-
 }
+
+notNullOrUndefined(value: any): boolean {
+    return value !== null && value !== undefined;
+  }
+
+validarEmail(email: string): boolean {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+  validarSenha(senha: string): boolean {
+  const regex = /^(?=.*[0-9]).{8,}$/;
+  return regex.test(senha);
+}
+
   registerUser() {
+  if (!this.notNullOrUndefined(this.registerUserData.nome) || this.registerUserData.nome.trim() === '' || this.registerUserData.orgao.trim() === '' || !this.notNullOrUndefined(this.registerUserData.orgao)) {
+    alert("Dados vazios ou inválidos.");
+    return;
+  } else if (!this.validarEmail(this.registerUserData.email)) {
+    alert("Email inválido.");
+    return;
+  } else if (!this.validarSenha(this.registerUserData.password)) {
+    alert("A senha deve ter no mínimo 8 caracteres e ao menos um número.");
+    return;
+  }
     this._auth.registerUser(this.registerUserData).subscribe(
       (res: any) =>{
         console.log(res)
+        alert("Usuário registrado com sucesso!");
         this._router.navigate(['/']);
       },
       (err: any) => console.log(err)
