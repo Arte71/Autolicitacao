@@ -44,6 +44,7 @@ export class Faseinterna implements OnInit {
 
   selectLicitacao(licitacao: Licitacao): void {
     const nomeTabela = this.formatarNomeTabela(licitacao);
+    this.router.navigate(['gerardoc']);
     console.log('Licitação Interna Selecionada (Payload para a rota):', nomeTabela);
   }
 }

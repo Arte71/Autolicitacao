@@ -102,3 +102,16 @@ button {
 button:hover {
             background-color: darkblue;
 }
+
+.entrar:hover {
+    background-color: #0bbd35;
+}
+
+a {
+    color: #0FDE3C;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

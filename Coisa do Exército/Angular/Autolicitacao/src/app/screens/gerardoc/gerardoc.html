@@ -3,10 +3,13 @@
 <form (ngSubmit)="enviarDados()" #f="ngForm">
 
   <div *ngFor="let item of itens; let i = index" class="item-card">
-      
-      <label>Nom da Tabela:</label>
-      <input [(ngModel)]="item.tableName" name="table{{i}}" required />
 
+      <div *ngIf="i === 0">
+        <label>Nome da Tabela:</label>
+        <input [(ngModel)]="item.tableName" name="tableName" required />
+        <br>
+      </div>
+      
       <label>Descrição:</label>
       <input [(ngModel)]="item.descricao" name="desc{{i}}" required />
 
@@ -19,7 +22,10 @@
       <label>Unidade:</label>
       <input [(ngModel)]="item.unidadeMedida" name="um{{i}}" required />
 
-      <button type="button" (click)="removerItem(i)">Remover</button>
+      <button type="button" (click)="removerItem(i)" [disabled]="i === 0">
+        Remover
+      </button>
+
       <hr />
   </div>
 

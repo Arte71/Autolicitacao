@@ -14,7 +14,7 @@ import { TabelaItem } from '../../model/licitacoes.model';
 export class Gerardoc {
   
   private apiUrl = 'http://localhost:5000/gerar_doc';
-  private salvarItemUrl = 'http://localhost:27071/api/tabelaitem';
+  private salvarItemUrl = 'http://localhost:27071/api/tabelaitens';
 
   itens: TabelaItem[] = [
     {
@@ -32,7 +32,6 @@ export class Gerardoc {
     this.itens.push({
       _id: '',
       itemId: '',
-      tableName: '',
       descricao: '',
       unidadeMedida: '',
     });

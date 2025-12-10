@@ -143,7 +143,7 @@ router.get('/licitacoes', async (req, res) => {
         const dados = await Licitacao.find(filtro)
             .populate('idResponsavel', 'username nome orgao roles')
             .populate('idUsuario', 'username nome orgao roles')
-            .populate('items', 'descricao quantidade_total unidadeMedida catmat')
+            .populate('items', 'tableName descricao quantidade_total unidadeMedida catmat')
             .populate('orgao', 'nomeOrgao')
             .exec();
 
@@ -228,6 +228,15 @@ router.delete('/licitacoes/:id', verifyToken, async (req, res) => {
             res.status(500).send(error);   
         }
     });
-    
+
+    router.get('/orgaos', async (req, res) => {
+        try {
+            let orgaos = await Orgao.find({});
+            res.status(200).send(orgaos);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error);
+        }
+    });
 });
 module.exports = router; 

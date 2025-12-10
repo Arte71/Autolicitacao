@@ -3,7 +3,7 @@
 export interface TabelaItem {
   _id: string;
   itemId: string;
-  tableName: string;
+  tableName?: string;
   descricao: string;//
   catmat?: string;
   quantidade_total?: number;
