@@ -40,7 +40,7 @@ export class CalendarComponent implements OnInit {
 
   constructor(private calendarService: CalendarServiceService) {
 
-    // efeito para recarregar eventos quando apiUrl mudar
+    
     effect(() => {
       const url = this.apiUrl();
       if (!url) {
@@ -63,7 +63,7 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit() {
-    // define mês/ano atual considerando horário de Brasília
+  
     this.initDisplayToTodayInBrasilia();
     this.buildCalendar(this.displayYear, this.displayMonth);
   }
@@ -104,7 +104,7 @@ export class CalendarComponent implements OnInit {
   }
 
   private loadEvents(events: CalendarEvent[] = []) {
-    // armazena eventos normalizados por ISO
+
     this.eventsMap.clear();
     for (const e of events) {
       const iso = this.normalizeToISODate(e.date);
@@ -113,7 +113,7 @@ export class CalendarComponent implements OnInit {
   }
 
   private buildCalendar(year: number, month: number) {
-    // limpa array antes de construir
+  
     this.calendarDays = [];
 
     const first = new Date(year, month, 1);
@@ -122,7 +122,7 @@ export class CalendarComponent implements OnInit {
     const prevMonthDays = new Date(year, month, 0).getDate();
     const todayISO = this.getTodayISOInBrasilia();
 
-    // dias do mês anterior
+    
     for (let i = startWeekday - 1; i >= 0; i--) {
       const dayNum = prevMonthDays - i;
       const dateObj = new Date(year, month - 1, dayNum);
@@ -138,7 +138,7 @@ export class CalendarComponent implements OnInit {
       });
     }
 
-    // dias do mês atual
+    
     for (let d = 1; d <= daysInMonth; d++) {
       const dateObj = new Date(year, month, d);
       const iso = this.toISODate(dateObj);
@@ -153,7 +153,7 @@ export class CalendarComponent implements OnInit {
       });
     }
 
-    // dias do próximo mês
+    
     while (this.calendarDays.length % 7 !== 0) {
       const nextIndex = this.calendarDays.length - startWeekday - daysInMonth + 1;
       const dateObj = new Date(year, month + 1, nextIndex);

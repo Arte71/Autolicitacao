@@ -1,0 +1,314 @@
+:root {
+  --cor-fundo-principal: #001f3f;
+  --cor-fundo-principal-claro: #003366;
+  --cor-card-secundario: #003a7a;
+  --cor-borda: #003366;
+  --cor-borda-detalhe: #1a4773;
+  --cor-texto-principal: white;
+  --cor-texto-secundario: #cccccc;
+  --cor-destaque-primario: #556b2f;
+  --cor-destaque-secundario: #334e6c;
+  --cor-destaque-alerta: #dc3545;
+}
+
+.main-layout-wrapper {
+  width: 80vw;
+  justify-content: center;
+  display: flex;
+  gap: 5rem;
+}
+
+.calendar-menu-card,
+.todos-main {
+  flex: 0 0 40%;
+  background-color: var(--cor-fundo-principal-claro);
+  color: var(--cor-texto-principal);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--cor-borda);
+}
+
+.calendar-menu-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.calendar-menu-card aside {
+  padding: 0;
+  margin: 0;
+}
+
+.todos-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-container {
+  flex-grow: 1;
+}
+
+button {
+  background-color: var(--cor-destaque-secundario);
+  color: var(--cor-texto-principal);
+  border: 1px solid #557799;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #446688;
+}
+
+button:disabled {
+  background-color: var(--cor-fundo-principal);
+  color: #888;
+  cursor: not-allowed;
+  border: 1px solid var(--cor-borda);
+}
+
+.add-container {
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.add-container .btn-primary {
+  background-color: var(--cor-destaque-primario);
+  color: var(--cor-texto-principal);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-container .btn-primary:hover:not(:disabled) {
+  background-color: #6b8e23;
+}
+
+.empty-message {
+  padding: 1rem;
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  border: 1px dashed #334e6c;
+  background-color: var(--cor-card-secundario);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.licitacao-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--cor-borda-detalhe);
+  border-radius: 0.5rem;
+  background-color: var(--cor-card-secundario);
+  color: var(--cor-texto-principal);
+  transition: background-color 0.2s;
+}
+
+.licitacao-item:hover {
+  background-color: #003a7a;
+}
+
+.item-index {
+  font-weight: bold;
+  margin-right: 0.5rem;
+  color: var(--cor-texto-principal);
+}
+
+.status-completed { color: #8fbc8f; }
+.status-pending { color: #f08080; }
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  padding: 0;
+}
+
+.btn-toggle {
+  background-color: var(--cor-destaque-primario);
+  color: var(--cor-texto-principal);
+}
+
+.btn-toggle:hover {
+  background-color: #6b8e23;
+}
+
+.btn-remove {
+  background-color: var(--cor-destaque-alerta);
+  color: var(--cor-texto-principal);
+}
+
+.btn-remove:hover {
+  background-color: #c82333;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background-color: var(--cor-fundo-principal);
+  color: var(--cor-texto-principal);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  width: 90%;
+  max-width: 500px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--cor-texto-secundario);
+}
+
+.todos-main input[type="text"],
+.todos-main textarea,
+.todos-main select,
+.modal-card input[type="text"],
+.modal-card textarea,
+.modal-card select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--cor-borda-detalhe);
+  background-color: #ffffff;
+  color: #000000;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  resize: vertical;
+  font-size: 1rem;
+}
+
+.todos-main input[type="text"]:focus,
+.todos-main textarea:focus,
+.todos-main select:focus,
+.modal-card input[type="text"]:focus,
+.modal-card textarea:focus,
+.modal-card select:focus {
+  border-color: var(--cor-destaque-primario);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.5);
+}
+
+.todos-main select,
+.modal-card select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: nowrap;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--cor-texto-secundario);
+  border: 1px solid var(--cor-texto-secundario);
+}
+
+.btn-secondary:hover {
+  background-color: var(--cor-borda-detalhe);
+  color: var(--cor-texto-principal);
+}
+
+.btn-submit {
+  background-color: var(--cor-destaque-primario);
+  color: var(--cor-texto-principal);
+  border: none;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #6b8e23;
+}
+
+@media (max-width: 1024px) {
+  .main-layout-wrapper {
+    width: 95vw;
+    gap: 2rem;
+  }
+
+  .calendar-menu-card,
+  .todos-main {
+    flex: 0 0 45%;
+  }
+
+  .modal-card {
+    padding: 1.5rem;
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-layout-wrapper {
+    width: 95vw;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .calendar-menu-card,
+  .todos-main {
+    flex: 1 1 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+  }
+
+  .add-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-container .btn-primary {
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem 0;
+}
+} 

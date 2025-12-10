@@ -1,13 +1,13 @@
 export interface Licitacao {
-  _id: string; // ID vindo do Mongo (ex: "65a...")
+  _id: string; 
   titulo: string;
   mensagem?: string;
   responsavel: string;
-  completed: boolean; // Mantive para compatibilidade com o seu CSS
+  completed: boolean; 
 }
 
 export interface Usuario {
   _id: string;
-  username: string;
+  nome: string;
   orgao: string;
 }

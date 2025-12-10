@@ -1,13 +1,14 @@
 // src/app/screens/todos/todos.component.ts
 
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { TitleComponent } from '../../components/shared/title/title.component';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { TodosService } from '../../services/todos.service.service';
 import { MenuComponent } from '../../components/shared/menu/menu.component';
-import { Licitacoes } from '../licitacoes/licitacoes';
+import { Licitacao } from '../../model/licitacoes.model';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-todos',
@@ -19,22 +20,23 @@ import { Licitacoes } from '../licitacoes/licitacoes';
     TitleComponent, 
     CalendarComponent,
     MenuComponent,
-    Licitacoes
+    NgIf
   ],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.css',
 })
 export class TodosComponent {
-  // private readonly router = inject(Router); // 👈 REMOVIDO!
+  // private readonly router = inject(Router);// 👈 REMOVIDO!
   private readonly fb = inject(FormBuilder);
   readonly todosService = inject(TodosService);
+  readonly auth = inject(Auth);
 
   isModalOpen = signal(false);
 
   licitacaoForm = this.fb.group({
-    titulo: ['', Validators.required],
-    mensagem: [''],
-    responsavel: ['', Validators.required]
+    tituloLicitacao: ['', Validators.required],
+    descricao: [''],
+    idResponsavel: ['', Validators.required],
   });
 
   constructor() {
@@ -54,10 +56,8 @@ export class TodosComponent {
 
   async onSubmit() {
     if (this.licitacaoForm.valid) {
-      const { titulo, mensagem, responsavel } = this.licitacaoForm.value;
-      
-      await this.todosService.add(titulo!, mensagem!, responsavel!);
-      
+      const { tituloLicitacao, descricao, idResponsavel} = this.licitacaoForm.value;
+      await this.todosService.add(tituloLicitacao!, descricao!, idResponsavel!);
       this.closeForm();
     }
   }

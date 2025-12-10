@@ -1,11 +1,23 @@
-<div class="main-layout">
+<div class="main-layout" [class.menu-open]="displayMenu()">
     
-    @if (showMenu()) {
-        <aside>
-            <app-menu></app-menu>
+    @if (!isLoginPage()) {
+        <button 
+            class="hamburger-menu" 
+            (click)="toggleMenu()" 
+            [class.is-active]="displayMenu()"
+            aria-label="Toggle Navigation Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    }
+
+    @if (!isLoginPage()) {
+        <aside class="sidebar-menu" [class.open]="displayMenu()">
+            <app-menu></app-menu>
         </aside>
     }
-    
+
     <main>
         <router-outlet></router-outlet>
     </main>

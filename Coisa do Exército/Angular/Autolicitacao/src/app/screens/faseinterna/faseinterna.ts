@@ -47,9 +47,9 @@ export class Faseinterna implements OnInit {
     });
   }
 
-  // 🌟 FUNÇÃO MODIFICADA 🌟
+  
   PegarId(licitacao: Licitacao): string {
-    // Retorna apenas o ID da licitação
+    
     return licitacao._id;
   }
 

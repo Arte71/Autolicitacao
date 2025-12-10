@@ -1,35 +1,97 @@
+$cor-fundo-pagina: #001f3f;
+$cor-fundo-main: #214799;
+$cor-fundo-principal-claro: #094988;
+$cor-fundo-sidebar: #003366;
+$cor-texto: #ffffff;
+$cor-texto-opcoes: #000000;
+
+$licitacao-card-surface: mix($cor-fundo-main, #ffffff, 80%);
+$licitacao-card-surface-alt: mix($cor-fundo-main, #ffffff, 65%);
+$licitacao-card-border: mix($licitacao-card-surface, #ffffff, 15%);
+$licitacao-card-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.25);
+$licitacao-radius: 1rem;
+
 .licitacoes {
-  padding: 1rem;
-  font-family: Arial, sans-serif;
-}
-
-h2 {
-  margin-bottom: 1rem;
-}
-
-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-form {
-  margin-top: 1rem;
-}
-
-form input {
-  margin-bottom: 1rem;
-  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: clamp(1rem, 2vw, 2rem);
   width: 100%;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  color: $cor-texto;
+  background-color: $cor-fundo-main;
+
+  h2 {
+    font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-align: center;
+    margin: 0.25rem 0 0.75rem;
+  }
+
+  .licitacao-item-wrapper {
+    width: min(28rem, 100%);
+  }
+
+  .licitacao-item-wrapper button,
+  .alerta-vazio {
+    width: 100%;
+    border: 1px solid $licitacao-card-border;
+    background-color: $licitacao-card-surface;
+    color: $cor-texto;
+    border-radius: $licitacao-radius;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    box-shadow: $licitacao-card-shadow;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    text-align: left;
+  }
+
+  .licitacao-item-wrapper button {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .licitacao-item-wrapper button:hover,
+  .licitacao-item-wrapper button:focus-visible {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.35);
+    border-color: mix($licitacao-card-surface, #ffffff, 50%);
+  }
+
+  .licitacao-item-wrapper button div:first-child {
+    font-weight: 700;
+  }
+
+  .licitacao-item-wrapper button div {
+    font-size: clamp(0.95rem, 0.3vw + 0.9rem, 1.05rem);
+  }
+
+  .alerta-vazio {
+    background-color: $licitacao-card-surface-alt;
+    color: mix($cor-texto, #000000, 90%);
+    align-items: center;
+    text-align: center;
+    border-style: solid;
+  }
+
+  .alerta-vazio p {
+    margin: 0;
+    font-size: clamp(1rem, 0.4vw + 0.95rem, 1.1rem);
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 720px) {
+  .licitacoes {
+    padding-inline: clamp(0.75rem, 4vw, 1.25rem);
+
+    .licitacao-item-wrapper button,
+    .alerta-vazio {
+      border-radius: 0.875rem;
+    }
+  }
 }

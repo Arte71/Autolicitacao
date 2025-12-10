@@ -1,0 +1,128 @@
+$cor-fundo-pagina: #001f3f;
+$cor-fundo-main: #214799;
+$cor-fundo-sidebar: #003366;
+$cor-texto: #ffffff;
+$cor-texto-opcoes: #000000;
+$cor-fundo-principal-claro: #094988; 
+
+.main-layout {
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    color: $cor-texto;
+    background-color: $cor-fundo-pagina; 
+    overflow-x: hidden;
+    position: relative;
+
+    > main {
+        width: 100%;
+        padding: 1.25rem;
+        background-color: $cor-fundo-main;
+        overflow-y: auto;
+        padding-top: 3.75rem;
+        transition: transform 0.3s ease;
+        min-height: 100vh;
+    }
+
+    .sidebar-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 20%;
+        min-width: 12.5rem;
+        background-color: $cor-fundo-sidebar;
+        padding: 3.75rem 1.25rem 1.25rem 1.25rem; // espaço para não ficar atrás do hambúrguer
+        box-shadow: 0.125rem 0 0.3125rem rgba(0, 0, 0, 0.5);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 800;
+
+        &.open {
+            transform: translateX(0);
+        }
+    }
+
+    &.menu-open {
+        > main {
+            transform: translateX(20%);
+        }
+    }
+}
+
+.hamburger-menu {
+    position: fixed;
+    z-index: 1000; // sempre acima da sidebar
+    top: 0.9375rem;
+    left: 0.9375rem;
+    background-color: $cor-fundo-sidebar; 
+    border-radius: 50%;
+    width: 2.5rem; 
+    height: 2.5rem; 
+    padding: 0.5rem; 
+    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.5);
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-around;
+    transition: all 0.3s ease;
+
+    span {
+        display: block;
+        width: 100%;
+        height: 0.1875rem;
+        background-color: $cor-texto;
+        border-radius: 0.1875rem;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    &.is-active {
+        span:nth-child(1) {
+            transform: translateY(0.6875rem) rotate(45deg);
+        }
+        span:nth-child(2) {
+            opacity: 0;
+        }
+        span:nth-child(3) {
+            transform: translateY(-0.6875rem) rotate(-45deg);
+        }
+    }
+}
+
+select {
+    option {
+        background-color: white !important; 
+        color: $cor-texto-opcoes !important; 
+    }
+}
+
+@media (max-width: 768px) {
+    .main-layout {
+        .sidebar-menu {
+            width: 70%;
+            min-width: 15rem;
+            padding-top: 3.75rem; // mantém espaço para o hambúrguer
+        }
+
+        &.menu-open {
+            > main {
+                transform: translateX(70%);
+            }
+        }
+
+        main {
+            padding-top: 3.75rem;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .main-layout {
+        main,
+        .sidebar-menu {
+            padding: 0.625rem;
+        }
+
+        .sidebar-menu {
+            padding-top: 3.75rem; 
+        }
+    }
+}

@@ -1,0 +1,102 @@
+:root {
+  --cor-fundo-principal: #001f3f;
+  --cor-card: #002e5c; 
+  --cor-texto-principal: #ffffff;
+  --cor-texto-secundario: #cccccc;
+  --cor-borda-escura: #1a4773;
+  --cor-destaque-primario: #556b2f; 
+}
+
+form {
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 400px;
+  background-color: var(--cor-card); 
+  color: var(--cor-texto-principal);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--cor-borda-escura);
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--cor-texto-secundario);
+}
+
+br {
+    display: none;
+}
+
+/* Aumento de Especificidade e Aplicação Direta do Fundo Branco e Letra Preta */
+form input[type="email"],
+form input[type="text"],
+form input[type="password"],
+form select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--cor-borda-escura);
+  
+  /* Corrigindo a Cor de Fundo para Branco */
+  background-color: #FFFFFF; 
+  /* Corrigindo a Cor do Texto para Preto */
+  color: #000000; 
+  
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--cor-destaque-primario);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.5);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  /* Seta Preta para contraste no fundo branco */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+select option {
+    background-color: var(--cor-card);
+    color: var(--cor-texto-principal);
+}
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  margin-top: 2rem;
+  background-color: var(--cor-destaque-primario);
+  color: var(--cor-texto-principal);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background-color: #6b8e23;
+}
+
+button[type="submit"]:disabled {
+  background-color: var(--cor-fundo-principal);
+  border: 1px solid #557799;
+  color: #888;
+  cursor: not-allowed;
+}

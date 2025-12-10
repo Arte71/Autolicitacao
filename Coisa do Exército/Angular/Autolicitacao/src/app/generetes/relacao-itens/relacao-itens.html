@@ -1,32 +1,34 @@
 <div class="relacao-itens-container">
-    <h2>Detalhes e Itens da Tabela: {{ nomeTabela }}</h2>
-    <p class="description">Esta é uma visualização **somente leitura** dos itens da licitação.</p>
-
-    @if (itensRelacao.length > 0) {
-        
-        <table class="itens-tabela">
-            <thead>
-                <tr>
-                    <th>ID Item</th>
-                    <th>Descrição do Item</th>
-                    <th>Catmat</th>
-                    <th>Quantidade Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (item of itensRelacao; track item.itemId) {
-                    <tr>
-                        <td>{{ item.itemId }}</td>
-                        <td>{{ item.descricao }}</td>
-                        <td>{{ item.catmat || 'N/A' }}</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
+    <h2>Detalhes da Tabela: {{ nomeTabela() }}</h2>
+    
+    @if (loading()) {
+        <div class="loading-state">Carregando dados...</div>
     } @else {
-        <div class="alerta-vazio">
-            <p>Não foram encontrados itens para a tabela <strong>{{ nomeTabela }}</strong>.</p>
-        </div>
+
+        @if (listaItens().length > 0) {
+            <table class="itens-tabela">
+                <thead>
+                    <tr>
+                        <th>ID Item</th>
+                        <th>Descrição</th>
+                        <th>Catmat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of listaItens(); track item.itemId) { 
+                        <tr>
+                            <td>{{ item.itemId }}</td>
+                            <td>{{ item.descricao }}</td>
+                            <td>{{ item.catmat }}</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        } @else {
+            <div class="alerta-vazio">
+                <h3>Tabela em produção... aguarde</h3>
+                <p>Nenhum dado encontrado para o ID <strong>{{ nomeTabela() }}</strong>.</p>
+            </div>
+        }
     }
 </div>
